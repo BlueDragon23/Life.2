@@ -1,7 +1,5 @@
 package classes;
 
-import javax.annotation.Resource;
-import java.util.Iterator;
 import java.util.List;
 
 public class Node {
@@ -39,6 +37,34 @@ public class Node {
         for (Resources r : resources) {
             r.tick();
         }
+    }
+
+    public double getFoodTotal() {
+        double value = 0;
+        for (Resources r : resources) {
+            if (r.getType() == Resources.ResourceType.FOOD) {
+                value += r.getAmount();
+            }
+        }
+        return value;
+    }
+    public double getMineralTotal() {
+        double value = 0;
+        for (Resources r : resources) {
+            if (r.getType() == Resources.ResourceType.MINERAL) {
+                value += r.getAmount();
+            }
+        }
+        return value;
+    }
+    public double getUtilityTotal() {
+        double value = 0;
+        for (Resources r : resources) {
+            if (r.getType() == Resources.ResourceType.UTILITY) {
+                value += r.getAmount();
+            }
+        }
+        return value;
     }
 
     public boolean hasTribe() {
