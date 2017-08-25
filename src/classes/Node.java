@@ -20,6 +20,7 @@ public class Node {
     //Basic Resource information
     private List<Resources> resources;
     private LandType landType;
+    
 
     public Node (int x, int y, LandType lt) {
         this.location = new Location(x,y);
@@ -27,6 +28,9 @@ public class Node {
         this.landType = lt;
 
         //Add the resources based on land type
+        for (int i=0; i < 5; i++) {
+            resources.add(new Resources(landType));
+        }
     }
 
     public boolean hasTribe() {
