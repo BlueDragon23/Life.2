@@ -2,8 +2,8 @@ package classes;
 
 public class Node {
     //Basic Node information
-    public Location location;
-    public Tribe tribe;
+    private Location location;
+    private Tribe tribe;
 
     //Basic Resource information
 
@@ -14,7 +14,7 @@ public class Node {
         this.tribe = null;
     }
 
-    public hasTribe() {
+    public boolean hasTribe() {
         return (!(tribe == null));
     }
 
