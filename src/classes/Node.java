@@ -1,5 +1,7 @@
 package classes;
 
+import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.List;
 
 public class Node {
@@ -20,7 +22,7 @@ public class Node {
     //Basic Resource information
     private List<Resources> resources;
     private LandType landType;
-    
+
 
     public Node (int x, int y, LandType lt) {
         this.location = new Location(x,y);
@@ -30,6 +32,12 @@ public class Node {
         //Add the resources based on land type
         for (int i=0; i < 5; i++) {
             resources.add(new Resources(landType));
+        }
+    }
+
+    public void tick() {
+        for (Resources r : resources) {
+            r.tick();
         }
     }
 

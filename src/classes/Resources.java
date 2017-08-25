@@ -22,8 +22,28 @@ public class Resources {
         type = ResourceType.getRandom();
         amount = 1000 * resourceModifier(type) * landModifier(lt);
         changeRate = Math.random() * landModifier(lt);
-
+        name = resource_name(lt);
         }
+
+    public void tick() {
+        amount +=  (100 * changeRate);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public double getAmount() {
+        return this.amount;
+    }
+
+    public double getChangeRate() {
+        return this.changeRate;
+    }
+
+    public ResourceType getType() {
+        return type;
+    }
 
     private int resourceModifier(ResourceType rt) {
         int modifier = (int)(Math.random() * 10);
