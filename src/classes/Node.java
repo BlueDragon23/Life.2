@@ -1,5 +1,6 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
@@ -26,7 +27,7 @@ public class Node {
         this.location = new Location(x,y);
         this.tribe = null;
         this.landType = lt;
-
+        resources = new ArrayList<>();
         //Add the resources based on land type
         for (int i=0; i < 5; i++) {
             resources.add(new Resources(landType));
@@ -65,6 +66,10 @@ public class Node {
             }
         }
         return value;
+    }
+
+    public LandType getLandType() {
+        return landType;
     }
 
     public boolean hasTribe() {

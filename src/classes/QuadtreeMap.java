@@ -11,4 +11,9 @@ public class QuadtreeMap implements Map {
     public Node getNode(Location l) {
         return map.getNode(l);
     }
+
+    @Override
+    public void addNode(Node n) {
+        map.addNode(n);
+    }
 }
