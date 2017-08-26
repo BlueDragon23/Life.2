@@ -1,6 +1,5 @@
 package classes;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +92,7 @@ public class Node {
     private void removeResourceType(double amount, int distribute, Resources.ResourceType rt) {
         for (Resources r: nodeResources) {
             if(r.getType() == rt) {
-                r.takeAmount((amount / distribute)); //negatives handeled in resources
+                r.takeAmount((amount / distribute)); //negatives handled in resources
             }
         }
     }
@@ -106,6 +105,7 @@ public class Node {
     }
     public void takeUtility(double amount) {
         removeResourceType(amount, countUtilityResources(), Resources.ResourceType.UTILITY);
+    }
 
     public LandType getLandType() {
         return landType;
