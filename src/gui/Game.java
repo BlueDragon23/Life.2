@@ -6,6 +6,7 @@ import classes.Node;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,6 +27,7 @@ public class Game {
 
     public void drawMap(Map m) {
         GraphicsContext g = canvas.getGraphicsContext2D();
+        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         // Make sure the bottomLeft is the bottomLeft of the screen
         int xOffset = -(bottomLeft.getX() * viewSize);
         int yOffset = -(bottomLeft.getY() * viewSize);
@@ -72,7 +74,7 @@ public class Game {
 
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            canvas.setWidth((double) newValue);
+            canvas.setWidth((double) newValue - 30);
         }
     }
 
@@ -83,4 +85,17 @@ public class Game {
             canvas.setHeight((double) newValue);
         }
     }
+
+    @FXML
+    protected void zoomIn(ActionEvent event) {
+        viewSize += 5;
+    }
+
+    @FXML
+    protected void zoomOut(ActionEvent event) {
+        if (viewSize > 5) {
+            viewSize -= 5;
+        }
+    }
+
 }

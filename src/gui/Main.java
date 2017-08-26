@@ -30,7 +30,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(location.openStream());
         Game controller = fxmlLoader.getController();
 
-        Scene scene = new Scene(root, 300, 300);
+        Scene scene = new Scene(root, 600, 600);
         controller.setHeightChangeListener(controller.getRootPane().heightProperty());
         controller.setWidthChangeListener(controller.getRootPane().widthProperty());
 
