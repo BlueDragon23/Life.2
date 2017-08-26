@@ -117,9 +117,13 @@ public class Tribe {
 
         boolean canVisit;
 
+        //Todo Aidan to steal for game
+        //For each of the possible nodes to return to the tribe to explore
         for (int i = 0; i < visibleNodes.size(); i++) {
-            //adjNodes = Map.getAdjacentNodes(visibleNodes.get(i)); //TODO get this working
+            //For each of the nodes look at what surrounds it.
+            //adjNodes = Map.getAdjacentNodes(visibleNodes.get(i));
             canVisit = false;
+            //We don't care about tiles which are only connected to a tribe by water or mountain
             for (int j = 0; j < adjNodes.size(); j++) {
                 Node adj = adjNodes.get(j);
                 //For each adjacent Node to us make sure it is connected by something other than water or mountain
@@ -127,10 +131,12 @@ public class Tribe {
                     canVisit = true;
                 }
             }
+            //Remove it if we can't visit it
             if (!canVisit) {
                 visibleNodes.remove(i);
             }
         }
+        //todo end
 
         //There is the possibility of no searching
         if (possibleExploration.size() > 0) {
