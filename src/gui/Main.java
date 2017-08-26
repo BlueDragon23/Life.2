@@ -5,6 +5,8 @@ import classes.Node;
 import classes.QuadtreeMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,7 +30,10 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(location.openStream());
         Game controller = fxmlLoader.getController();
 
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root, 300, 300);
+        controller.setHeightChangeListener(controller.getRootPane().heightProperty());
+        controller.setWidthChangeListener(controller.getRootPane().widthProperty());
+
         primaryStage.setTitle("Life.2");
         primaryStage.setScene(scene);
 
