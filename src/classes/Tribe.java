@@ -19,6 +19,12 @@ public class Tribe {
     private double explorationSpeed;
     private double militryPower;
     private double agriculturalKnowledge;
+    private int battles;
+
+    //Retained Resources (loot)
+    private double foodLoot;
+    private double materialLoot;
+    private double utilityLoot;
 
     public Tribe(Node n, long initialPopulation) {
         tribeNodes = new ArrayList<>();
@@ -28,15 +34,43 @@ public class Tribe {
         this.population = initialPopulation;
 
         //Set the traits of the tribe
-        explorePreference = 1 - Math.random();
-        agriculturalPreference = 1 - Math.random();
-        militaryPreference = 1 - Math.random();
+        setPreferences();
 
         //Set initial stats
         this.birthRate = 0.1;
         this.explorationSpeed = 1 + explorePreference;
         this.agriculturalKnowledge = 1 + agriculturalPreference;
         this.militryPower = 1 + militaryPreference;
+    }
+
+    private void setPreferences() {
+        double total = 0.97;
+        explorePreference = 0.01;
+        agriculturalPreference = 0.01;
+        militaryPreference = 0.01;
+        List<Integer> preferences = new ArrayList<>();
+        preferences.add(0);
+        preferences.add(1);
+        preferences.add(2);
+
+        while(preferences.size() > 0) {
+            int trait = preferences.get(Helpers.randBetween(0, preferences.size() -1));
+            switch (trait) {
+                case 0:
+                    explorePreference +=Helpers.randBetween(0, total);
+                    total -= explorePreference - 0.01;
+                    break;
+                case 1:
+                    agriculturalPreference +=Helpers.randBetween(0, total);
+                    total -= agriculturalPreference - 0.01;
+                break;
+                case 2:
+                    militaryPreference +=Helpers.randBetween(0, total);
+                    total -= militaryPreference - 0.01;
+                    break;
+            }
+            preferences.remove(preferences.indexOf(trait));
+        }
     }
 
     public void addNode(Node n) {
@@ -82,6 +116,12 @@ public class Tribe {
     public int nodeCount() {
         return tribeNodes.size();
     }
+    public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot) {
+        this.battles++;
+        this.foodLoot += foodLoot;
+        this.materialLoot += materialLoot;
+        this.utilityLoot += utilityLoot;
+    }
 
     public void turnCollection() {
         //Eat the food
@@ -93,6 +133,16 @@ public class Tribe {
         population += (int)(birthRate * population);
 
         //Spend the resources
+        research();
+    }
+
+    private void research() {
+
+    }
+
+    public double forGloryAndHonour() {
+        //This method determines what they spend this time investing in
+        return (population * militaryPreference * militryPower + battles);
     }
 
     public List<Node> getSeenNodes() {
