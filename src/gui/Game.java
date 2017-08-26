@@ -28,7 +28,7 @@ public class Game {
                     continue;
                 }
                 switch (n.getLandType()) {
-                    case LAND:
+                    case PLAINS:
                         g.setFill(Color.GREEN);
                         break;
                     case WATER:

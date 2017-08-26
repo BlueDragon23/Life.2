@@ -33,10 +33,10 @@ public class Main extends Application {
         primaryStage.setScene(scene);
 
         Map m = new QuadtreeMap();
-        m.addNode(new Node(0, 0, Node.LandType.LAND));
-        m.addNode(new Node(0, 1, Node.LandType.LAND));
+        m.addNode(new Node(0, 0, Node.LandType.PLAINS));
+        m.addNode(new Node(0, 1, Node.LandType.PLAINS));
         m.addNode(new Node(1, 1, Node.LandType.WATER));
-        m.addNode(new Node(1, 0, Node.LandType.LAND));
+        m.addNode(new Node(1, 0, Node.LandType.PLAINS));
 
         new AnimationTimer() {
             @Override
