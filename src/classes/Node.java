@@ -127,4 +127,8 @@ public class Node {
         Node other = (Node) o;
         return this.location.equals(other.location);
     }
+
+    public String toString() {
+        return location + " - " + landType;
+    }
 }

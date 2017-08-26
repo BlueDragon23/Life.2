@@ -20,9 +20,9 @@ public class Game {
     @FXML
     private Pane pane;
 
-    private Location bottomLeft = new Location(-10, -10);
-    private Location topRight = new Location(10, 10);
-    private int viewSize = 50;
+    private Location bottomLeft = new Location(-50, -50);
+    private Location topRight = new Location(50, 50);
+    private int viewSize = 10;
 
     public void drawMap(Map m) {
         GraphicsContext g = canvas.getGraphicsContext2D();
@@ -41,6 +41,9 @@ public class Game {
                             break;
                         case WATER:
                             g.setFill(Color.BLUE);
+                            break;
+                        case COASTAL:
+                            g.setFill(Color.YELLOW);
                             break;
                         default:
                             g.setFill(Color.RED);
@@ -65,18 +68,18 @@ public class Game {
         return pane;
     }
 
-    private class WidthChangeListener implements ChangeListener {
+    private class WidthChangeListener implements ChangeListener<Number> {
 
         @Override
-        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
             canvas.setWidth((double) newValue);
         }
     }
 
-    private class HeightChangeListener implements ChangeListener {
+    private class HeightChangeListener implements ChangeListener<Number> {
 
         @Override
-        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
             canvas.setHeight((double) newValue);
         }
     }

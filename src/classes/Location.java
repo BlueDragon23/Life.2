@@ -30,4 +30,8 @@ public class Location {
         return (other.x == x) && (other.y == y);
     }
 
+    public String toString() {
+        return "x: " + x + ", y: " + y;
+    }
+
 }
