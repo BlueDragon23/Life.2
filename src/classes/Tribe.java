@@ -40,7 +40,7 @@ public class Tribe {
     }
 
     public void addNode(Node n) {
-        exploredNodes.remove(n); //Remove the item if it is in the 
+        exploredNodes.remove(n); //Remove the item if it is in the
         tribeNodes.add(n);
     }
 
@@ -154,31 +154,6 @@ public class Tribe {
             }
         }
         return expand;
-    }
-
-
-
-    private boolean canMove() {
-
-        //Double spread speed on plains
-
-
-        //Can't cross mountain ranges
-
-
-        //Can't habit water
-
-
-        //Coastal and forest are "normal"
-
-
-
-
-
-
-
-
-        return false;
     }
 
 
