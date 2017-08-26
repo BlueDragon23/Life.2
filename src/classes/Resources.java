@@ -8,7 +8,13 @@ public class Resources {
         MINERAL,
         UTILITY;
 
-        private static ResourceType getRandom() {
+        private static ResourceType getRandom(Node.LandType lt) {
+            ResourceType value;
+            value = values()[(int) (Math.random() * values().length)];
+            //Prevent water from having utility
+            while ((value == ResourceType.UTILITY) && (lt == Node.LandType.WATER)) {
+                value = values()[(int) (Math.random() * values().length)];
+            }
             return values()[(int) (Math.random() * values().length)];
         }
     }
@@ -145,39 +151,39 @@ public class Resources {
                     case FOOD:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Berries";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Apples";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Rabbits";
                                 break;
                         }
                         break;
                     case MINERAL:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Salt";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Rocks";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Copper";
                                 break;
                         }
                         break;
                     case UTILITY:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Wood";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Rope";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Artistic Views";
                                 break;
                         }
                         break;
@@ -188,41 +194,31 @@ public class Resources {
                     case FOOD:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Tuna";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Salmon";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Sea Weed";
                                 break;
                         }
                         break;
                     case MINERAL:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Salt";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Pearls";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Oil";
                                 break;
                         }
                         break;
                     case UTILITY:
-                        switch (index) {
-                            case 0:
-                                name = "";
-                                break;
-                            case 1:
-                                name = "";
-                                break;
-                            case 2:
-                                name = "";
-                                break;
-                        }
+                        name = "SHOULD NOT HAPPEN";
                         break;
                 }
                 break;
@@ -231,39 +227,39 @@ public class Resources {
                     case FOOD:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Squirrel";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Nuts";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Fruits";
                                 break;
                         }
                         break;
                     case MINERAL:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Gold";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Oil";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Steel";
                                 break;
                         }
                         break;
                     case UTILITY:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Sap";
                                 break;
                             case 1:
-                                name = "";
+                                name = "Vines";
                                 break;
                             case 2:
-                                name = "";
+                                name = "Wood";
                                 break;
                         }
                         break;
@@ -274,7 +270,7 @@ public class Resources {
                     case FOOD:
                         switch (index) {
                             case 0:
-                                name = "";
+                                name = "Mountain Goat";
                                 break;
                             case 1:
                                 name = "";
