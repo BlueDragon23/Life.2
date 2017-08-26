@@ -36,6 +36,13 @@ public class Resources {
         return this.amount;
     }
 
+    public void takeAmount(double change) {
+        amount -= change;
+        if (amount < 0) {
+            amount = 0;
+        }
+    }
+
     public double getChangeRate() {
         return this.changeRate;
     }
@@ -133,5 +140,4 @@ public class Resources {
         }
         return modifier;
     }
-
     }

@@ -1,20 +1,42 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Tribe {
     private List<Node> tribeNodes;
+    private List<Node> exploredNodes;
     private long population;
 
-    //Stats for the tribe
-    private double brithRate;
-    private double lifeExpectancy;
+    //innate stats for a tribe (randomly allocated currently)
+    private double explorePreference;
+    private double agriculturalPreference;
+    private double militaryPreference;
 
+    //Stats which allocated at start but can be improved
+    private double birthRate;
+    private double explorationSpeed;
+    private double militryPower;
+    private double agriculturalKnowledge;
 
-    public Tribe(Node n, double initalFood, double initalMinerals, double initalUtility, long initalPopulation) {
+    public Tribe(Node n, long initialPopulation) {
+        tribeNodes = new ArrayList<>();
+        exploredNodes = new ArrayList<>();
+
         tribeNodes.add(n);
-        this.population = initalPopulation;
+        this.population = initialPopulation;
+
+        //Set the traits of the tribe
+        explorePreference = 1 - Math.random();
+        agriculturalPreference = 1 - Math.random();
+        militaryPreference = 1 - Math.random();
+
+        //Set initial stats
+        this.birthRate = 1;
+        this.explorationSpeed = 1 + explorePreference;
+        this.agriculturalKnowledge = 1 + agriculturalPreference;
+        this.militryPower = 1 + militaryPreference;
     }
 
     public void addNode(Node n) {
@@ -58,6 +80,22 @@ public class Tribe {
     }
     public int nodeCount() {
         return tribeNodes.size();
+    }
+
+    public void turnCollection() {
+        //Eat the food
+        for (Node n: tribeNodes) {
+            n.takeFood((population / tribeNodes.size()));
+        }
+
+        //Birth the people
+
+
+        //Spend the resources
+    }
+
+    public void explore() {
+
     }
 
 
