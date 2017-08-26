@@ -1,5 +1,8 @@
 package classes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuadtreeMap implements Map {
     private Quadtree map;
 
@@ -15,5 +18,10 @@ public class QuadtreeMap implements Map {
     @Override
     public void addNode(Node n) {
         map.addNode(n);
+    }
+
+    @Override
+    public List<Node> getAdjacentNodes(Node n) {
+        return new ArrayList<>();
     }
 }

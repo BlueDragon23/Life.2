@@ -8,6 +8,6 @@ public interface Map {
 
     Node getNode(Location l);
     void addNode(Node n);
-
     public List<Node> getAdjacentNodes(Node n);
+
 }
