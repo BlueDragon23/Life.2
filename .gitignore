@@ -25,3 +25,6 @@ hs_err_pid*
 *.iml
 *.xml
 *.xml___jb_tmp___
+
+# directory #
+out/*

@@ -27,7 +27,7 @@ public class Location {
             return false;
         }
         Location other = (Location) o;
-        return other.x == x && other.y == y;
+        return (other.x == x) && (other.y == y);
     }
 
 }
