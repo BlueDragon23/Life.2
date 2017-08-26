@@ -41,8 +41,8 @@ public class Quadtree {
 
     public void addNode(Node node) {
         Location l = node.getLocation();
-        if (!inBounds(l)) {
-            // Not in this quadtree, the fuck are you doing
+        if (!inBounds(l) || contains(node.getLocation())) {
+            // Not in this quadtree or already exists in this quadtree, the fuck are you doing
             return;
         } else if (NE != null) {
             // We have subtrees, put it there
@@ -62,6 +62,21 @@ public class Quadtree {
             }
             nodes.clear();
         }
+    }
+
+    public boolean contains(Location l) {
+        if (!inBounds(l)) {
+            return false;
+        }
+        for (Node n: nodes) {
+            if (n.getLocation().equals(l)) {
+                return true;
+            }
+        }
+        if (NE != null) {
+            return getSubtree(l).contains(l);
+        }
+        return false;
     }
 
     private boolean inBounds(Location l) {
