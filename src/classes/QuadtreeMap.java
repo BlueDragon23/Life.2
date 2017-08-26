@@ -1,6 +1,6 @@
 package classes;
 
-public class QuadtreeMap implements Map {
+public class QuadtreeMap extends Map {
     private Quadtree map;
 
     public QuadtreeMap() {
