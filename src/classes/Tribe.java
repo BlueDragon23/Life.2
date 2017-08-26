@@ -151,7 +151,7 @@ public class Tribe {
     }
 
     private double researchCost(double traitDiscount, double currentAmount) {
-
+        return 0;
     }
 
     public double forGloryAndHonour() {
