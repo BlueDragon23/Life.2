@@ -3,6 +3,7 @@ package gui;
 import classes.Location;
 import classes.Map;
 import classes.Node;
+import classes.Tribe;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -59,8 +60,15 @@ public class Game {
                     }
 
                 }
-                BlendMode bm = g.getGlobalBlendMode();
-                g.setGlobalBlendMode(m.getNode(new Location(x,y)).getTribe().getBlendMode());
+
+                Tribe t = (m.getNode(new Location(x,y)).getTribe());
+                BlendMode bm;
+                if(t == null) {
+                    bm = g.getGlobalBlendMode();
+                } else {
+                    bm = t.getBlendMode();
+                }
+                g.setGlobalBlendMode(bm);
                 g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
                 g.setGlobalBlendMode(bm);
             }
