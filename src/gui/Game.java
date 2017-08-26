@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -39,6 +40,7 @@ public class Game {
                 Node n = m.getNode(new Location(x, y));
                 if (n == null) {
                     g.setFill(Color.GREY);
+
                 } else {
                     switch (n.getLandType()) {
                         case PLAINS:

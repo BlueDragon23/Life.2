@@ -19,6 +19,7 @@ public abstract class Map {
     protected int minX;
 
     public abstract Node getNode(Location l);
+    public abstract int getInitialRadius();
     public abstract void addNode(Node n);
 
     public List<Node> getAdjacentNodes(Node n) {
@@ -117,5 +118,9 @@ public abstract class Map {
                 }
             }
         }
+    }
+
+    public void addTribe() {
+        
     }
 }
