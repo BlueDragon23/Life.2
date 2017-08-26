@@ -88,17 +88,26 @@ public class Node {
         return countResourceType(Resources.ResourceType.UTILITY);
     }
 
-    private void removeResourceType(double amount, int distribute, Resources.ResourceType rt) {
+    private double removeResourceType(double amount, int distribute, Resources.ResourceType rt) {
         for (Resources r: nodeResources) {
             if(r.getType() == rt) {
-                r.takeAmount((amount / distribute)); //negatives handled in resources
-                //Todo handel bottom out
+                if ((amount / distribute) > r.getAmount()) {
+                    r.takeAmount(r.getAmount());
+                    amount -= r.getAmount();
+                    distribute--;
+                } else {
+                    r.takeAmount((amount / distribute)); //negatives handled in resources
+                    amount -= (amount / distribute);
+                    distribute--;
+                }
             }
         }
+        //returns leftover food
+        return (amount);
     }
 
-    public void takeFood(double amount) {
-        removeResourceType(amount, countFoodResources(), Resources.ResourceType.FOOD);
+    public double takeFood(double amount) {
+        return removeResourceType(amount, countFoodResources(), Resources.ResourceType.FOOD);
     }
     public void takeMineral(double amount) {
         removeResourceType(amount, countMineralesources(), Resources.ResourceType.MINERAL);
