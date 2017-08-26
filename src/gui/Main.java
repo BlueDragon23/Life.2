@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,11 +34,13 @@ public class Main extends Application {
         Game controller = fxmlLoader.getController();
 
         Scene scene = new Scene(root, 600, 600);
-        controller.setHeightChangeListener(controller.getRootPane().heightProperty());
-        controller.setWidthChangeListener(controller.getRootPane().widthProperty());
 
         primaryStage.setTitle("Life.2");
         primaryStage.setScene(scene);
+
+        controller.scroll.viewportBoundsProperty().addListener((ChangeListener<Bounds>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
+        controller.scroll.hvalueProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
+        controller.scroll.vvalueProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
 
         Map m = new QuadtreeMap();
         m.initMap();

@@ -36,6 +36,22 @@ public abstract class Map {
         return nodes;
     }
 
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
+
     public void initMap() {
         addCoastline();
         addInterior();
