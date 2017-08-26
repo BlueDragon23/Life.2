@@ -10,7 +10,7 @@ public class Node {
 
     //Land type
     public enum LandType {
-        LAND,
+        PLAINS,
         WATER,
         MOUNTAIN,
         COASTAL,
@@ -80,4 +80,12 @@ public class Node {
         return location;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Node)) {
+            return false;
+        }
+        Node other = (Node) o;
+        return this.location.equals(other.location);
+    }
 }

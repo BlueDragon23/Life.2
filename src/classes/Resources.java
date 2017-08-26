@@ -1,7 +1,5 @@
 package classes;
 
-import java.util.Random;
-
 public class Resources {
     public enum ResourceType {
         FOOD,
@@ -67,7 +65,7 @@ public class Resources {
     private double landModifier(Node.LandType lt) {
         double modifier = 1;
         switch (lt) {
-            case LAND:
+            case PLAINS:
                 switch (this.type) {
                     case FOOD:
                         modifier = 1;
