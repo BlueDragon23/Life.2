@@ -53,9 +53,12 @@ public class Game {
                             g.setFill(Color.RED);
                             break;
                     }
-                }
-                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
 
+                }
+                BlendMode bm = g.getGlobalBlendMode();
+                g.setGlobalBlendMode(m.getNode(new Location(x,y)).getTribe().getBlendMode());
+                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
+                g.setGlobalBlendMode(bm);
             }
         }
     }

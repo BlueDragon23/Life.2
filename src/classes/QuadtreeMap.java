@@ -30,4 +30,5 @@ public class QuadtreeMap extends Map {
 
         map.addNode(n);
     }
+
 }

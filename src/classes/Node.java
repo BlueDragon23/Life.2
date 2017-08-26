@@ -140,4 +140,12 @@ public class Node {
     public String toString() {
         return location + " - " + landType;
     }
+
+    public void setTribe(Tribe t) {
+        this.tribe = t;
+    }
+
+    public Tribe getTribe() {
+        return tribe;
+    }
 }

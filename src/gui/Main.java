@@ -52,7 +52,7 @@ public class Main extends Application {
         primaryStage.show();
 
         Executor exe = Executors.newCachedThreadPool();
-        exe.execute(new GameLoop(m.getInitialRadius()));
+        exe.execute(new GameLoop(m.getInitialRadius(),m));
 
     }
 }

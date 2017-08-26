@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.scene.effect.BlendMode;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
@@ -19,7 +20,6 @@ public abstract class Map {
     protected int minX;
 
     public abstract Node getNode(Location l);
-    public abstract int getInitialRadius();
     public abstract void addNode(Node n);
 
     public List<Node> getAdjacentNodes(Node n) {
@@ -104,7 +104,18 @@ public abstract class Map {
         }
     }
 
-    public void addTribe() {
-        
+    public void addNewTribe(int x, int y) {
+        Node n = getNode(new Location(x, y));
+
+        if((n.getLandType() != Node.LandType.WATER) && (n.getLandType() != Node.LandType.MOUNTAIN)){
+            n.setTribe(new Tribe(n, Helpers.randBetween(90,110), BlendMode.BLUE));
+        }
+
+        //set colour
+
     }
+
+    public int getInitialRadius() {
+        return initialRadius;
+    };
 }
