@@ -16,7 +16,6 @@ public class Node {
         MOUNTAIN,
         COASTAL,
         FOREST
-        //Todo add more land types!
     }
 
     //Basic Resource information
@@ -93,6 +92,7 @@ public class Node {
         for (Resources r: nodeResources) {
             if(r.getType() == rt) {
                 r.takeAmount((amount / distribute)); //negatives handled in resources
+                //Todo handel bottom out
             }
         }
     }
