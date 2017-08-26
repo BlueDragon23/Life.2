@@ -77,11 +77,11 @@ public class Quadtree {
     }
 
     private Quadtree getSubtree(Location l) {
-        if (l.getX() > centre.getX() && l.getY() > centre.getY()) {
+        if (l.getX() >= centre.getX() && l.getY() >= centre.getY()) {
             return NE;
-        } else if (l.getX() > centre.getX() && l.getY() < centre.getY()) {
+        } else if (l.getX() >= centre.getX() && l.getY() <= centre.getY()) {
             return SE;
-        } else if (l.getX() < centre.getX() && l.getY() < centre.getY()) {
+        } else if (l.getX() <= centre.getX() && l.getY() <= centre.getY()) {
             return SW;
         } else {
             return NW;
