@@ -107,31 +107,44 @@ public class Tribe {
         return seen;
     }
 
-    public void explore(List<Node> adjNodes) {
+    public void explore(List<Node> visibleNodes) {
         //given list of adjacent nodes from the map
         //for each of the adj nodes if it is a water
         //node than ignore it.
 
-        List<Node> possibleExploriation = new ArrayList<>();
-        for (Node n: adjNodes) {
-            if(n.getLandType() != Node.LandType.WATER) {
-                possibleExploriation.add(n);
+        List<Node> possibleExploration = new ArrayList<>();
+        List<Node> adjNodes = new ArrayList<>();
+
+        boolean canVisit;
+
+        for (int i = 0; i < visibleNodes.size(); i++) {
+            //adjNodes = Map.getAdjacentNodes(visibleNodes.get(i)); //TODO get this working
+            canVisit = false;
+            for (int j = 0; j < adjNodes.size(); j++) {
+                Node adj = adjNodes.get(j);
+                //For each adjacent Node to us make sure it is connected by something other than water or mountain
+                if((adj.getLandType() != Node.LandType.WATER) && (adj.getLandType() != Node.LandType.MOUNTAIN)) {
+                    canVisit = true;
+                }
+            }
+            if (!canVisit) {
+                visibleNodes.remove(i);
             }
         }
 
         //There is the possibility of no searching
-        if (possibleExploriation.size() > 0) {
+        if (possibleExploration.size() > 0) {
             int searchSize = (int)(explorationSpeed * Helpers.randBetween(0,(explorationSpeed + 1)));
-            if (searchSize > possibleExploriation.size()) {
-                for (Node n: possibleExploriation) {
+            if (searchSize > possibleExploration.size()) {
+                for (Node n: possibleExploration) {
                     exploredNodes.add(n);
                 }
             } else if (searchSize > 0) {
                 int randNodePosition;
                 for (int i = 0; i < searchSize; i ++) {
-                    randNodePosition = Helpers.randBetween(0,possibleExploriation.size() - 1);
-                    exploredNodes.add(possibleExploriation.get(randNodePosition));
-                    possibleExploriation.remove(randNodePosition);
+                    randNodePosition = Helpers.randBetween(0,possibleExploration.size() - 1);
+                    exploredNodes.add(possibleExploration.get(randNodePosition));
+                    possibleExploration.remove(randNodePosition);
                 }
             }
         }
