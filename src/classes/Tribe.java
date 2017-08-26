@@ -137,6 +137,20 @@ public class Tribe {
     }
 
     private void research() {
+        for(int rc=0; rc < 5; rc++) {
+            double rVal = Helpers.randBetween(0.0,1.0);
+            //Placed in order - explore/agri/mil
+            if (rVal < explorePreference) {
+
+            } else if ((rVal > explorePreference) && (rVal < explorePreference + agriculturalPreference)) {
+
+            } else {
+
+            }
+        }
+    }
+
+    private double researchCost(double traitDiscount, double currentAmount) {
 
     }
 
