@@ -71,4 +71,8 @@ public class Node {
         return (!(tribe == null));
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
 }
