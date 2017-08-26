@@ -26,6 +26,16 @@
         </MenuBar>
     </top>
     <center>
-        <Canvas fx:id="canvas" width="300" height="300"></Canvas>
+        <ScrollPane fx:id="scroll" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS">
+            <content>
+            <Canvas fx:id="canvas"></Canvas>
+            </content>
+        </ScrollPane>
     </center>
+    <right>
+        <VBox>
+            <Button text="+" onAction="#zoomIn"/>
+            <Button text="-" onAction="#zoomOut"/>
+        </VBox>
+    </right>
 </BorderPane>
