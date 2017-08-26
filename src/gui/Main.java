@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Main extends Application {
 
@@ -48,5 +50,9 @@ public class Main extends Application {
         }.start();
 
         primaryStage.show();
+
+        Executor exe = Executors.newCachedThreadPool();
+        exe.execute(new GameLoop(m.getInitialRadius()));
+
     }
 }

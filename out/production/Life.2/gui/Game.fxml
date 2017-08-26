@@ -28,4 +28,10 @@
     <center>
         <Canvas fx:id="canvas" width="300" height="300"></Canvas>
     </center>
+    <right>
+        <VBox>
+            <Button text="+" onAction="#zoomIn"/>
+            <Button text="-" onAction="#zoomOut"/>
+        </VBox>
+    </right>
 </BorderPane>
