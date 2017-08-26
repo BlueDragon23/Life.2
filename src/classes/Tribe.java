@@ -117,6 +117,7 @@ public class Tribe {
         return tribeNodes.size();
     }
     public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot) {
+        //Todo add knowledge loot
         this.battles++;
         this.foodLoot += foodLoot;
         this.materialLoot += materialLoot;
@@ -125,6 +126,7 @@ public class Tribe {
 
     public void turnCollection() {
         //Eat the food
+        //Todo add atrition
         for (Node n: tribeNodes) {
             n.takeFood((population / tribeNodes.size()));
         }
@@ -156,7 +158,7 @@ public class Tribe {
 
     public double forGloryAndHonour() {
         //This method determines what they spend this time investing in
-        return (population * militaryPreference * militryPower + battles);
+        return (population * (militaryPreference * militryPower + battles));
     }
 
     public List<Node> getSeenNodes() {
