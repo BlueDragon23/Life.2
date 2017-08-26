@@ -116,20 +116,31 @@ public class Tribe {
     public int nodeCount() {
         return tribeNodes.size();
     }
-    public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot) {
-        //Todo add knowledge loot
+    public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
+                             double agriRLoot) {
         this.battles++;
         this.foodLoot += foodLoot;
         this.materialLoot += materialLoot;
         this.utilityLoot += utilityLoot;
+        this.explorationSpeed += exploreRLoot;
+        this.agriculturalKnowledge += agriRLoot;
     }
 
     public void turnCollection() {
         //Eat the food
-        //Todo add atrition
+        int nodesRemaining = tribeNodes.size();
+        long allotedFood = population / nodesRemaining;
+        double deficitFood = 0;
         for (Node n: tribeNodes) {
-            n.takeFood((population / tribeNodes.size()));
+            deficitFood += n.takeFood(allotedFood);
+            nodesRemaining--;
+            if ((deficitFood != 0) && (nodesRemaining != 0)) {
+                //distribute the overflowing food out to the rest of the nodes
+                allotedFood += (deficitFood / nodesRemaining);
+                deficitFood = 0;
+            }
         }
+        population -= deficitFood;
 
         //Birth the people
         population += (int)(birthRate * population);
