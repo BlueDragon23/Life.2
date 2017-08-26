@@ -16,6 +16,9 @@ public abstract class Map {
 
     public abstract Node getNode(Location l);
     public abstract void addNode(Node n);
+    public List<Node> getAdjacentNodes(Node n) {
+
+    }
 
     public void initMap() {
         addCoastline();

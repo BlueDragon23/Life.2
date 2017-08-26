@@ -1,8 +1,7 @@
 package classes;
 
-public class QuadtreeMap extends Map {
+public class QuadtreeMap implements Map {
     private Quadtree map;
-
 
     public QuadtreeMap() {
         map = new Quadtree(new Location(0, 0), halfMapSize);
