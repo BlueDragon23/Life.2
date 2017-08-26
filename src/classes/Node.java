@@ -1,6 +1,7 @@
 package classes;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
@@ -28,7 +29,7 @@ public class Node {
         this.location = new Location(x,y);
         this.tribe = null;
         this.landType = lt;
-
+        nodeResources = new ArrayList<>();
         //Add the resources based on land type
         for (int i=0; i < resourceCount; i++) {
             nodeResources.add(new Resources(landType));
@@ -105,6 +106,9 @@ public class Node {
     }
     public void takeUtility(double amount) {
         removeResourceType(amount, countUtilityResources(), Resources.ResourceType.UTILITY);
+
+    public LandType getLandType() {
+        return landType;
     }
 
     public boolean hasTribe() {
