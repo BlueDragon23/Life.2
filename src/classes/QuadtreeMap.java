@@ -13,6 +13,15 @@ public class QuadtreeMap extends Map {
     }
 
     @Override
+    public Node getNodeSafe(Location l) {
+        Node n = map.getNode(l);
+        if (n == null) {
+            n = genNode(l);
+        }
+        return n;
+    }
+
+    @Override
     public void addNode(Node n) {
         Location l = n.getLocation();
         if (l.getX() > maxX) {

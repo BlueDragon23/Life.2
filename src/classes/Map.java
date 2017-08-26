@@ -1,8 +1,8 @@
 package classes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javafx.scene.effect.BlendMode;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
@@ -20,11 +20,11 @@ public abstract class Map {
     protected int minX;
 
     public abstract Node getNode(Location l);
+    public abstract Node getNodeSafe(Location l);
     public abstract void addNode(Node n);
 
-    public List<Node> getAdjacentNodes(Node n) {
+    public List<Node> getAdjacentNodes(Location l) {
         List<Node> nodes = new ArrayList<>();
-        Location l = n.getLocation();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) {
@@ -133,5 +133,12 @@ public abstract class Map {
 
     public int getInitialRadius() {
         return initialRadius;
-    };
+    }
+
+    protected Node genNode(Location l) {
+        List<Node> nodes = getAdjacentNodes(l);
+        nodes = nodes.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        // TODO: make this actually generate nodes
+        return new Node(l.getX(), l.getY(), Node.LandType.COASTAL);
+    }
 }
