@@ -155,7 +155,9 @@ public class Tribe {
         return tribeNodes.size();
     }
     public void addBattleResult(double foodLoot, double mineralLoot, double utilityLoot) {
-        this.battles++;
+        if(foodLoot > 0) {
+            this.battles++;
+        }
         this.foodLoot += foodLoot;
         this.mineralLoot += mineralLoot;
         this.utilityLoot += utilityLoot;
