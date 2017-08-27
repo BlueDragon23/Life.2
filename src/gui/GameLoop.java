@@ -41,9 +41,9 @@ public class GameLoop implements Runnable {
                     visibleNodes.remove(i);
                 }
             }
-            tribe.explore(visibleNodes);
+            tribe.turnExplore(visibleNodes);
 
-            List<Node> expansion = tribe.expand();
+            List<Node> expansion = tribe.turnExpand();
             for (Node node : expansion) {
                 node.setTribe(tribe);
                 tribe.addNode(node);
