@@ -1,19 +1,23 @@
 package gui;
 
-import classes.Location;
-import classes.Map;
-import classes.QuadtreeMap;
+import classes.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -42,13 +46,39 @@ public class Main extends Application {
         primaryStage.setTitle("Life.2");
         primaryStage.setScene(scene);
 
+        Map m = new QuadtreeMap();
+        m.initMap();
+
         GraphicsContext tribeG = controller.tribeCanvas.getGraphicsContext2D();
 
         controller.tribeCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 // Display a window with more details
-
+                Location l = controller.getLocationForScreen(event.getX(), event.getY());
+                Node n = m.getNode(l);
+                if (n.hasTribe()) {
+                    Popup popup = new Popup();
+                    GridPane gp = new GridPane();
+                    gp.setStyle("-fx-background-color: white");
+                    popup.getContent().addAll(gp);
+                    gp.setHgap(10);
+                    gp.setVgap(10);
+                    gp.addColumn(0, new Text("Colour"), new Text("Type"), new Text("Exploration"), new Text("Agriculture"),
+                            new Text("Military"), new Text("Battles Won"));
+                    Tribe t = n.getTribe();
+                    gp.addColumn(1, new Text(t.getColour().toString()));
+                    Button b = new Button("Close");
+                    b.setDefaultButton(true);
+                    b.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            popup.hide();
+                        }
+                    });
+                    gp.addRow(6, b);
+                    popup.show(primaryStage);
+                }
             }
         });
 
@@ -68,8 +98,6 @@ public class Main extends Application {
         controller.scroll.hvalueProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
         controller.scroll.vvalueProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
 
-        Map m = new QuadtreeMap();
-        m.initMap();
 
         new AnimationTimer() {
             @Override
