@@ -66,6 +66,12 @@ public class Game {
                         case COASTAL:
                             resourceLayer.setFill(Color.YELLOW);
                             break;
+                        case FOREST:
+                            resourceLayer.setFill(Color.FORESTGREEN);
+                            break;
+                        case MOUNTAIN:
+                            resourceLayer.setFill(Color.BLACK);
+                            break;
                         default:
                             resourceLayer.setFill(Color.RED);
                             break;

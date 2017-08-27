@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sun.org.apache.bcel.internal.generic.LAND;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
@@ -101,7 +102,7 @@ public abstract class Map {
                 l = new Location(x, y);
                 n = getNode(l);
                 if (n == null) {
-                    addNode(new Node(x, y, Node.LandType.PLAINS));
+                    addNode(genNode(l));
                 } else if (n.getLandType() == Node.LandType.COASTAL) {
                     break;
                 }
@@ -110,7 +111,7 @@ public abstract class Map {
                 l = new Location(x, y);
                 n = getNode(l);
                 if (n == null) {
-                    addNode(new Node(x, y, Node.LandType.PLAINS));
+                    addNode(genNode(l));
                 } else if (n.getLandType() == Node.LandType.COASTAL) {
                     break;
                 }
@@ -179,6 +180,48 @@ public abstract class Map {
         List<Node> nodes = getAdjacentNodes(l);
         nodes = nodes.stream().filter(Objects::nonNull).collect(Collectors.toList());
         // TODO: make this actually generate nodes
-        return new Node(l.getX(), l.getY(), Node.LandType.COASTAL);
+        if (nodes.size() == 0) {
+            // Initial behaviour
+            return new Node(l.getX(), l.getY(), Node.LandType.PLAINS);
+        }
+        java.util.Map<Node.LandType, Integer> types = new HashMap<>();
+        for (Node n : nodes) {
+            types.put(n.getLandType(), types.getOrDefault(n.getLandType(), 0) + 1);
+        }
+        int largestVal = 0;
+        Node.LandType largest = Node.LandType.PLAINS;
+        for (Node.LandType type : types.keySet()) {
+            if (types.get(type) > largestVal) {
+                largest = type;
+                largestVal = types.get(type);
+            }
+        }
+        Random r = new Random();
+        Node.LandType actual = largest;
+        double test = r.nextDouble();
+        if (largest == Node.LandType.PLAINS) {
+            if (test < 0.1) {
+                actual = Node.LandType.MOUNTAIN;
+            } else if (test > 0.9) {
+                actual = Node.LandType.FOREST;
+            }
+        } else if (largest == Node.LandType.COASTAL) {
+            actual = Node.LandType.PLAINS;
+        } else if (largest == Node.LandType.WATER) {
+            if (test < 0.2) {
+                actual = Node.LandType.COASTAL;
+            }
+        } else if (largest == Node.LandType.MOUNTAIN) {
+            if (test < 0.6) {
+                actual = Node.LandType.PLAINS;
+            }
+        } else if (largest == Node.LandType.FOREST) {
+            if (test < 0.2) {
+                actual = Node.LandType.PLAINS;
+            } else if (test > 0.95) {
+                actual = Node.LandType.MOUNTAIN;
+            }
+        }
+        return new Node(l.getX(), l.getY(), actual);
     }
 }
