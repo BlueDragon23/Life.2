@@ -16,11 +16,26 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
 
+        //Game inital startup (map already made)
+        int count = 10;
+        while (count > 0) {
+            boolean validAdd = map.addNewTribe(Helpers.randBetween(-50,50),Helpers.randBetween(-50,50));
+            if (validAdd) {
+                count--;
+            }
+        }
+
+
+
         while(true) {
             try {
 
+
+
+
+
+
                 Thread.sleep(1000);
-                map.addNewTribe(Helpers.randBetween(-50,50),Helpers.randBetween(-50,50));
 
             } catch(InterruptedException e) {
                 System.out.println("broke!");
