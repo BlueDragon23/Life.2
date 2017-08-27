@@ -129,6 +129,10 @@ public class Node {
         return this.location.equals(other.location);
     }
 
+    public int hashCode() {
+        return location.hashCode() * 15485863 + landType.hashCode();
+    }
+
     public String toString() {
         return location + " - " + landType;
     }
