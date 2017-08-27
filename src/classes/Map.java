@@ -200,7 +200,7 @@ public abstract class Map {
         Node.LandType actual = largest;
         double test = r.nextDouble();
         if (largest == Node.LandType.PLAINS) {
-            if (test < 0.1) {
+            if (test < 0.05) {
                 actual = Node.LandType.MOUNTAIN;
             } else if (test > 0.9) {
                 actual = Node.LandType.FOREST;
