@@ -40,32 +40,24 @@ public class Node {
         }
     }
 
-    public double getFoodTotal() {
+    public double getResourceTotal(Resources.ResourceType rt) {
         double value = 0;
         for (Resources r : nodeResources) {
-            if (r.getType() == Resources.ResourceType.FOOD) {
+            if (r.getType() == rt) {
                 value += r.getAmount();
             }
         }
         return value;
+    }
+
+    public double getFoodTotal() {
+        return getResourceTotal(Resources.ResourceType.FOOD);
     }
     public double getMineralTotal() {
-        double value = 0;
-        for (Resources r : nodeResources) {
-            if (r.getType() == Resources.ResourceType.MINERAL) {
-                value += r.getAmount();
-            }
-        }
-        return value;
+        return getResourceTotal(Resources.ResourceType.MINERAL);
     }
     public double getUtilityTotal() {
-        double value = 0;
-        for (Resources r : nodeResources) {
-            if (r.getType() == Resources.ResourceType.UTILITY) {
-                value += r.getAmount();
-            }
-        }
-        return value;
+        return getResourceTotal(Resources.ResourceType.UTILITY);
     }
 
     private int countResourceType(Resources.ResourceType rt) {

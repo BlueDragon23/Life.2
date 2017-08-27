@@ -91,28 +91,24 @@ public class Tribe {
         return tribeNodes.contains(n);
     }
 
-    public double getFood() {
-        double food = 0;
+    private double getResource(Resources.ResourceType rt) {
+        double resources = 0;
         for (Node n : tribeNodes) {
-            food += n.getFoodTotal();
+            resources += n.getResourceTotal(rt);
         }
-        return food;
+        return resources;
+    }
+
+    public double getFood() {
+        return getResource(Resources.ResourceType.FOOD);
     }
 
     public double getMinerals() {
-        double minerals = 0;
-        for (Node n : tribeNodes) {
-            minerals += n.getMineralTotal();
-        }
-        return minerals;
+        return getResource(Resources.ResourceType.MINERAL);
     }
 
     public double getUtility() {
-        double utility = 0;
-        for (Node n : tribeNodes) {
-            utility += n.getUtilityTotal();
-        }
-        return utility;
+        return getResource(Resources.ResourceType.UTILITY);
     }
 
     public long getPopulation() {
@@ -158,15 +154,42 @@ public class Tribe {
         for(int rc=0; rc < 5; rc++) {
             double rVal = Helpers.randBetween(0.0,1.0);
             //Placed in order - explore/agri/mil
+            double spendMin;
+            double spendUtil;
             if (rVal < explorePreference) {
-
+                //Spend on explore points
+                spendMin = 0;
+                spendUtil = 0;
+                if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
+                        (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
+                    //Spend and Add
+                }
             } else if ((rVal > explorePreference) && (rVal < explorePreference + agriculturalPreference)) {
-
+                //Spend on agri
+                //Spend on explore points
+                spendMin = 0;
+                spendUtil = 0;
+                if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
+                        (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
+                    //Spend and Add
+                }
             } else {
-
+                //Spend on milit
+                //Spend on explore points
+                spendMin = 0;
+                spendUtil = 0;
+                if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
+                        (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
+                    //Spend and Add
+                }
             }
         }
     }
+
+    private boolean canSpend(double amount, Resources.ResourceType rt) {
+        return (amount < getResource(rt));
+    }
+
 
     private double researchCost(double traitDiscount, double currentAmount) {
         return 0;
@@ -189,14 +212,14 @@ public class Tribe {
         return seen;
     }
 
-    public void explore(List<Node> possibleExploration) {
+    public void turnExplore(List<Node> possibleExploration) {
         //given list of adjacent nodes from the map
         //for each of the adj nodes if it is a water
         //node than ignore it.
 
         //There is the possibility of no searching
         if (possibleExploration.size() > 0) {
-            int searchSize = (int)(explorationSpeed * Helpers.randBetween(0,(explorationSpeed + 1)));
+            int searchSize = (int)(population % (explorationSpeed * Helpers.randBetween(0,(explorationSpeed * 10)))) + 1;
             if (searchSize > possibleExploration.size()) {
                 for (Node n: possibleExploration) {
                     exploredNodes.add(n);
@@ -212,9 +235,9 @@ public class Tribe {
         }
     }
 
-    public List<Node> expand() {
+    public List<Node> turnExpand() {
         List<Node> expand = new ArrayList<>();
-        int expandSize = (int)(militaryPreference * Helpers.randBetween(0,(militaryPreference + 1)));
+        int expandSize = (int)(population%(militaryPreference * Helpers.randBetween(0,(militaryPreference * 10))));
         if (exploredNodes.size() > 0) {
             if (expandSize > exploredNodes.size()) {
                 for (Node n: exploredNodes) {
