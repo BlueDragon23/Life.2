@@ -40,8 +40,8 @@ public class Game {
         resourceCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
         tribeCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
         tribeCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
-        GraphicsContext g = resourceCanvas.getGraphicsContext2D();
-        g.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
+        GraphicsContext resourceLayer = resourceCanvas.getGraphicsContext2D();
+        resourceLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
         // Make sure the bottomLeft is the bottomLeft of the screen
         int xOffset = getXOffset();
         int yOffset = getYOffset();
@@ -53,37 +53,41 @@ public class Game {
                 }
                 Node n = m.getNode(l);
                 if (n == null) {
-                    g.setFill(Color.GREY);
-
+                    resourceLayer.setFill(Color.GREY);
                 } else {
                     switch (n.getLandType()) {
                         case PLAINS:
-                            g.setFill(Color.GREEN);
+                            resourceLayer.setFill(Color.GREEN);
                             break;
                         case WATER:
-                            g.setFill(Color.BLUE);
+                            resourceLayer.setFill(Color.BLUE);
                             break;
                         case COASTAL:
-                            g.setFill(Color.YELLOW);
+                            resourceLayer.setFill(Color.YELLOW);
                             break;
                         default:
-                            g.setFill(Color.RED);
+                            resourceLayer.setFill(Color.RED);
                             break;
                     }
 
                 }
-                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
-                /*
-                Tribe t = (m.getNode(new Location(x,y)).getTribe());
-                BlendMode bm;
-                if(t == null) {
-                    bm = g.getGlobalBlendMode();
-                } else {
-                    bm = t.getBlendMode();
+                resourceLayer.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
+            }
+        }
+        //Tribe Layer
+        GraphicsContext tribeLayer = resourceCanvas.getGraphicsContext2D();
+        tribeLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
+        for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
+            for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
+                Node n = m.getNode(new Location(x, y));
+                if (n != null) {
+                    if (n.hasTribe()) {
+                        //Add a rectangle for the tribe using tribe rec colour
+                        Tribe t = (m.getNode(new Location(x,y)).getTribe());
+                        tribeLayer.setFill(t.getColour());
+                        tribeLayer.fillOval(x * viewSize + xOffset,y * viewSize + yOffset, viewSize, viewSize);
+                    }
                 }
-                g.setGlobalBlendMode(bm);
-                g.setGlobalBlendMode(bm);
-                */
             }
         }
     }

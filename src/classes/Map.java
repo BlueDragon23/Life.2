@@ -1,6 +1,8 @@
 package classes;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -120,14 +122,17 @@ public abstract class Map {
         }
     }
 
-    public void addNewTribe(int x, int y) {
+    public boolean addNewTribe(int x, int y) {
         Node n = getNode(new Location(x, y));
-
         if((n.getLandType() != Node.LandType.WATER) && (n.getLandType() != Node.LandType.MOUNTAIN)){
-            n.setTribe(new Tribe(n, Helpers.randBetween(90,110), BlendMode.BLUE));
+            //get random colour
+            javafx.scene.paint.Color c = javafx.scene.paint.Color.rgb(Helpers.randBetween(0,255),
+                    Helpers.randBetween(0,255),Helpers.randBetween(0,255));
+            n.setTribe(new Tribe(n,Helpers.randBetween(90,110),c));
+            return true;
+        } else {
+            return false;
         }
-
-        //set colour
 
     }
 
