@@ -54,13 +54,18 @@ public class Main extends Application {
         GraphicsContext tribeG = controller.tribeCanvas.getGraphicsContext2D();
 
         controller.tribeCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            private Popup popup;
             @Override
             public void handle(MouseEvent event) {
                 // Display a window with more details
                 Location l = controller.getLocationForScreen(event.getX(), event.getY());
                 Node n = m.getNode(l);
                 if (n.hasTribe()) {
+                    if (this.popup != null) {
+                        this.popup.hide();
+                    }
                     Popup popup = new Popup();
+                    this.popup = popup;
                     popup.setX(controller.resourceCanvas.getWidth() - 50);
                     popup.setY(controller.resourceCanvas.getTranslateY());
                     GridPane gp = new GridPane();
