@@ -20,9 +20,9 @@ public class Tribe {
 
     //Stats which allocated at start but can be improved
     private double birthRate;
-    private int explorationSpeed;
-    private int militryPower;
-    private int agriculturalKnowledge;
+    public int explorationSpeed;
+    public int militryPower;
+    public int agriculturalKnowledge;
     private int battles;
 
     //Retained Resources (loot)
@@ -77,6 +77,40 @@ public class Tribe {
             preferences.remove(preferences.indexOf(trait));
         }
     }
+
+    public String getType() {
+        if ((explorePreference > militaryPreference) && (explorePreference > agriculturalPreference)) {
+            //Get second pref
+            if (agriculturalPreference > militaryPreference) {
+                //Explore/Ag
+                return "Exploring Agriculture";
+            } else {
+                //Explore/Mil
+                return "Exploring Aggressive ";
+            }
+        } else if ((agriculturalPreference > explorePreference) && (agriculturalPreference > militaryPreference)) {
+            //Get second pref
+            if (explorePreference > militaryPreference) {
+                //Ag/Exp
+                return "Agricultural Exploration";
+            } else {
+                //Ag/Mil
+                return "Agriculture Enforced ";
+            }
+        } else {
+            //Mil pref is highest
+            //Get second pref
+            if (agriculturalPreference > explorePreference) {
+                //Mil/Ag
+                return "Aggressive Agriculture";
+            } else {
+                //Mil/Exp
+                return "Aggressive Exploration";
+            }
+        }
+    }
+
+
 
     public void addNode(Node n) {
         exploredNodes.remove(n); //Remove the item if it is in the
