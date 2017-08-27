@@ -80,7 +80,7 @@ public class Node {
         return countResourceType(Resources.ResourceType.UTILITY);
     }
 
-    private double removeResourceType(double amount, int distribute, Resources.ResourceType rt) {
+    private double takeResourceType(double amount, int distribute, Resources.ResourceType rt) {
         for (Resources r: nodeResources) {
             if(r.getType() == rt) {
                 if ((amount / distribute) > r.getAmount()) {
@@ -99,13 +99,13 @@ public class Node {
     }
 
     public double takeFood(double amount) {
-        return removeResourceType(amount, countFoodResources(), Resources.ResourceType.FOOD);
+        return takeResourceType(amount, countFoodResources(), Resources.ResourceType.FOOD);
     }
     public void takeMineral(double amount) {
-        removeResourceType(amount, countMineralesources(), Resources.ResourceType.MINERAL);
+        takeResourceType(amount, countMineralesources(), Resources.ResourceType.MINERAL);
     }
     public void takeUtility(double amount) {
-        removeResourceType(amount, countUtilityResources(), Resources.ResourceType.UTILITY);
+        takeResourceType(amount, countUtilityResources(), Resources.ResourceType.UTILITY);
     }
 
     public LandType getLandType() {
