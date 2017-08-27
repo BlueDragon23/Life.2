@@ -238,36 +238,10 @@ public class Tribe {
         return seen;
     }
 
-    public void turnExplore(List<Node> visibleNodes) {
+    public void turnExplore(List<Node> possibleExploration) {
         //given list of adjacent nodes from the map
         //for each of the adj nodes if it is a water
         //node than ignore it.
-
-        List<Node> possibleExploration = new ArrayList<>();
-        List<Node> adjNodes = new ArrayList<>();
-
-        boolean canVisit;
-
-        //Todo Aidan to steal for game
-        //For each of the possible nodes to return to the tribe to explore
-        for (int i = 0; i < visibleNodes.size(); i++) {
-            //For each of the nodes look at what surrounds it.
-            //adjNodes = Map.getAdjacentNodes(visibleNodes.get(i));
-            canVisit = false;
-            //We don't care about tiles which are only connected to a tribe by water or mountain
-            for (int j = 0; j < adjNodes.size(); j++) {
-                Node adj = adjNodes.get(j);
-                //For each adjacent Node to us make sure it is connected by something other than water or mountain
-                if((adj.getLandType() != Node.LandType.WATER) && (adj.getLandType() != Node.LandType.MOUNTAIN)) {
-                    canVisit = true;
-                }
-            }
-            //Remove it if we can't visit it
-            if (!canVisit) {
-                visibleNodes.remove(i);
-            }
-        }
-        //todo end
 
         //There is the possibility of no searching
         if (possibleExploration.size() > 0) {

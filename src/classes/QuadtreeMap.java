@@ -4,6 +4,7 @@ public class QuadtreeMap extends Map {
     private Quadtree map;
 
     public QuadtreeMap() {
+        super();
         map = new Quadtree(new Location(0, 0), halfMapSize);
     }
 
