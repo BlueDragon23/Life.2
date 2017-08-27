@@ -42,7 +42,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
 
         GraphicsContext tribeG = controller.tribeCanvas.getGraphicsContext2D();
-        tribeG.setGlobalAlpha(0.3);
 
         controller.tribeCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

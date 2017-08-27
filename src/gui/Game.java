@@ -76,8 +76,8 @@ public class Game {
             }
         }
         //Tribe Layer
-        GraphicsContext tribeLayer = resourceCanvas.getGraphicsContext2D();
-        tribeLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
+        GraphicsContext tribeLayer = tribeCanvas.getGraphicsContext2D();
+        tribeLayer.clearRect(0, 0, tribeCanvas.getWidth(), tribeCanvas.getHeight());
         for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
             for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
                 Node n = m.getNode(new Location(x, y));
