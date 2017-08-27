@@ -13,7 +13,7 @@ public class GameLoop implements Runnable {
     }
 
     private void tick() {
-
+        
     }
     private void init() {
 
