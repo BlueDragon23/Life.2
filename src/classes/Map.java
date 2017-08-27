@@ -73,7 +73,7 @@ public abstract class Map {
 
     private void addCoastline() {
         SplineInterpolator sp = new SplineInterpolator();
-        int size = (int) Math.ceil(2*Math.PI / 0.2);
+        int size = (int) Math.ceil(2*Math.PI / 0.2) + 1;
         double[] ts = new double[size];
         double[] xs = new double[size];
         double[] ys = new double[size];
@@ -84,6 +84,9 @@ public abstract class Map {
             xs[count] = (initialRadius - 10) * (random.nextGaussian()/20 + Math.cos(t));
             ys[count] = (initialRadius - 10) * (random.nextGaussian()/20 + Math.sin(t));
         }
+        ts[count] = ts[0] + 2*Math.PI;
+        xs[count] = xs[0];
+        ys[count] = ys[0];
         PolynomialSplineFunction fx = sp.interpolate(ts, xs);
         PolynomialSplineFunction fy = sp.interpolate(ts, ys);
 
