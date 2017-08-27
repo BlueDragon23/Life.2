@@ -14,6 +14,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -40,7 +42,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(location.openStream());
         Game controller = fxmlLoader.getController();
 
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 1200, 1200);
 
         primaryStage.setTitle("Life.2");
         primaryStage.setScene(scene);
@@ -58,7 +60,10 @@ public class Main extends Application {
                 Node n = m.getNode(l);
                 if (n.hasTribe()) {
                     Popup popup = new Popup();
+                    popup.setX(controller.resourceCanvas.getWidth() - 50);
+                    popup.setY(controller.resourceCanvas.getTranslateY());
                     GridPane gp = new GridPane();
+                    gp.setStyle("-fx-border-color: black");
                     gp.setStyle("-fx-background-color: white");
                     popup.getContent().addAll(gp);
                     gp.setHgap(10);
@@ -66,7 +71,9 @@ public class Main extends Application {
                     gp.addColumn(0, new Text("Colour"), new Text("Type"), new Text("Exploration"), new Text("Agriculture"),
                             new Text("Military"), new Text("Battles Won"));
                     Tribe t = n.getTribe();
-                    gp.addColumn(1, new Text(t.getColour().toString()));
+                    gp.addColumn(1, new Text(t.getColour().toString()), new Text(t.getType()), new Text(Integer.toString(t.explorationSpeed)),
+                            new Text(Integer.toString(t.agriculturalKnowledge)), new Text(Integer.toString(t.militryPower)),
+                            new Text(Integer.toString(t.getBattleLog().size())));
                     Button b = new Button("Close");
                     b.setDefaultButton(true);
                     b.setOnAction(new EventHandler<ActionEvent>() {
