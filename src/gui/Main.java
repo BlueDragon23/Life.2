@@ -15,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -77,10 +78,18 @@ public class Main extends Application {
             }
         }.start();
 
-        primaryStage.show();
-
-        Executor exe = Executors.newCachedThreadPool();
+        //Start game loop
+        Executor exe = Executors.newSingleThreadExecutor();
         exe.execute(new GameLoop(m.getInitialRadius(),m));
 
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                if(event.equals(WindowEvent.WINDOW_CLOSE_REQUEST)) {
+                    //Kill?
+                }
+            }
+        });
     }
 }

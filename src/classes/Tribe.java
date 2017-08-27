@@ -154,14 +154,11 @@ public class Tribe {
     public int nodeCount() {
         return tribeNodes.size();
     }
-    public void addBattleResult(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
-                             double agriRLoot) {
+    public void addBattleResult(double foodLoot, double mineralLoot, double utilityLoot) {
         this.battles++;
         this.foodLoot += foodLoot;
-        this.mineralLoot += materialLoot;
+        this.mineralLoot += mineralLoot;
         this.utilityLoot += utilityLoot;
-        this.explorationSpeed += exploreRLoot;
-        this.agriculturalKnowledge += agriRLoot;
     }
 
     public void addBattleLog(BattleLog bl) {
@@ -353,8 +350,21 @@ public class Tribe {
             } else if (expandSize > 0) {
                 int randNodePosition;
                 for (int i = 0; i < expandSize; i ++) {
-                    randNodePosition = Helpers.randBetween(0,exploredNodes.size() - 1);
-                    if(canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                    //If they are aggressive they will go for other people by default
+                    if (militaryPreference > 0.50) {
+                        List<Node> otherTribeNodes = new ArrayList<>();
+                        for(Node n: exploredNodes) {
+                            if(n.hasTribe() && (expandSize > 0)) {
+                                if (canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                                    expand.add(n);
+                                    spendResource(expandCost, Resources.ResourceType.FOOD);
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                    randNodePosition = Helpers.randBetween(0, exploredNodes.size() - 1);
+                    if (canSpend(expandCost, Resources.ResourceType.FOOD)) {
                         expand.add(exploredNodes.get(randNodePosition));
                         spendResource(expandCost, Resources.ResourceType.FOOD);
                     }
@@ -371,28 +381,7 @@ public class Tribe {
 
 
 
-    public class BattleLog{
-        private int time;
-        private Color enemyColour;
-        private boolean outcome;
-        public BattleLog(int t,Color c, boolean result) {
-            this.time = t;
-            this.enemyColour = c;
-            this.outcome = result;
-        }
 
-        public int getTime() {
-            return time;
-        }
-
-        public Color getEnemyColour() {
-            return enemyColour;
-        }
-
-        public boolean getOutcome() {
-            return outcome;
-        }
-    }
 
 
 
