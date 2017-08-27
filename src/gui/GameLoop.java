@@ -53,8 +53,10 @@ public class GameLoop implements Runnable {
             List<Node> expansion = tribe.turnExpand();
             for (Node node : expansion) {
                 List<Tribe> expandingTribe = expansionNodes.getOrDefault(node, new ArrayList<>());
-                expandingTribe.add(tribe);
-                expansionNodes.put(node, expandingTribe);
+                if (!expandingTribe.contains(tribe)) {
+                    expandingTribe.add(tribe);
+                    expansionNodes.put(node, expandingTribe);
+                }
             }
         }
         for (Node n : expansionNodes.keySet()) {
