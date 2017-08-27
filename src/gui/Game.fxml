@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.Game"
-            fx:id="pane"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Game">
     <top>
         <MenuBar>
             <menus>
             <Menu text="File">
                 <items>
-                    <MenuItem text="Open"></MenuItem>
+                    <MenuItem text="Open" />
                 </items>
             </Menu>
             </menus>
@@ -28,14 +25,19 @@
     <center>
         <ScrollPane fx:id="scroll" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS">
             <content>
-            <Canvas fx:id="canvas"></Canvas>
+            <Pane>
+               <children>
+                      <Canvas id="resourceCanvas" fx:id="resourceCanvas" />
+                  <Canvas id="tribeCanvas" fx:id="tribeCanvas" height="200.0" width="200.0" />
+               </children>
+            </Pane>
             </content>
         </ScrollPane>
     </center>
     <right>
         <VBox>
-            <Button text="+" onAction="#zoomIn"/>
-            <Button text="-" onAction="#zoomOut"/>
+            <Button onAction="#zoomIn" text="+" />
+            <Button onAction="#zoomOut" text="-" />
         </VBox>
     </right>
 </BorderPane>

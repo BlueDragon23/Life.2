@@ -3,43 +3,55 @@ package gui;
 import classes.Location;
 import classes.Map;
 import classes.Node;
-import classes.Tribe;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class Game {
     @FXML
-    private Canvas canvas;
+    public Canvas resourceCanvas;
+
+    @FXML
+    public Canvas tribeCanvas;
 
     @FXML
     public ScrollPane scroll;
 
     private Location bottomLeft = new Location(-50, -50);
     private Location topRight = new Location(50, 50);
-    private int viewSize = 10;
+    int viewSize = 10;
+    Location selected;
+
+    public int getXOffset() {
+        return -(bottomLeft.getX() * viewSize);
+    }
+
+    public int getYOffset() {
+        return -(bottomLeft.getY() * viewSize);
+    }
 
     public void drawMap(Map m) {
-        canvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
-        canvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
-        GraphicsContext g = canvas.getGraphicsContext2D();
-        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        resourceCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
+        resourceCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
+        tribeCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
+        tribeCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
+        GraphicsContext g = resourceCanvas.getGraphicsContext2D();
+        g.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
         // Make sure the bottomLeft is the bottomLeft of the screen
-        int xOffset = -(bottomLeft.getX() * viewSize);
-        int yOffset = -(bottomLeft.getY() * viewSize);
+        int xOffset = getXOffset();
+        int yOffset = getYOffset();
         for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
             for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
-                Node n = m.getNode(new Location(x, y));
+                Location l = new Location(x, y);
+                if (l.equals(selected)) {
+                    continue;
+                }
+                Node n = m.getNode(l);
                 if (n == null) {
                     g.setFill(Color.GREY);
 
@@ -60,7 +72,8 @@ public class Game {
                     }
 
                 }
-
+                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
+                /*
                 Tribe t = (m.getNode(new Location(x,y)).getTribe());
                 BlendMode bm;
                 if(t == null) {
@@ -69,8 +82,8 @@ public class Game {
                     bm = t.getBlendMode();
                 }
                 g.setGlobalBlendMode(bm);
-                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
                 g.setGlobalBlendMode(bm);
+                */
             }
         }
     }
@@ -79,7 +92,7 @@ public class Game {
 
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            canvas.setWidth((double) newValue - 30);
+            resourceCanvas.setWidth((double) newValue - 30);
         }
     }
 
@@ -87,7 +100,7 @@ public class Game {
 
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            canvas.setHeight((double) newValue);
+            resourceCanvas.setHeight((double) newValue);
         }
     }
 
@@ -114,6 +127,12 @@ public class Game {
         double x = (scrollPane.getContent().getBoundsInParent().getWidth() - width) * hValue;
         double y = (scrollPane.getContent().getBoundsInParent().getHeight() - height) * vValue;
 
+    }
+
+    Location getLocationForScreen(double x, double y) {
+        double xRound = x - x % viewSize;
+        double yRound = y - y % viewSize;
+        return new Location((int) (xRound - getXOffset()) / viewSize, (int) (yRound - getYOffset()) / viewSize);
     }
 
 }
