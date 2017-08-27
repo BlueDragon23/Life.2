@@ -3,6 +3,7 @@ package gui;
 import classes.Location;
 import classes.Map;
 import classes.Node;
+import classes.Tribe;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
