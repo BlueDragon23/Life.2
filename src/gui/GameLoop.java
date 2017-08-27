@@ -19,7 +19,7 @@ public class GameLoop implements Runnable {
 
         int count = 10;
         while (count > 0) {
-            boolean validAdd = map.addNewTribe(Helpers.randBetween(-50,50),Helpers.randBetween(-50,50));
+            boolean validAdd = map.addNewTribe(Helpers.randBetween(-1 * (radius),radius),Helpers.randBetween(-1 * (radius),radius));
             if (validAdd) {
                 count--;
             }
