@@ -20,9 +20,9 @@ public class Tribe {
 
     //Stats which allocated at start but can be improved
     private double birthRate;
-    private double explorationSpeed;
-    private double militryPower;
-    private double agriculturalKnowledge;
+    private int explorationSpeed;
+    private int militryPower;
+    private int agriculturalKnowledge;
     private int battles;
 
     //Retained Resources (loot)
@@ -43,9 +43,9 @@ public class Tribe {
 
         //Set initial stats
         this.birthRate = 0.1;
-        this.explorationSpeed = 1 + explorePreference;
-        this.agriculturalKnowledge = 1 + agriculturalPreference;
-        this.militryPower = 1 + militaryPreference;
+        this.explorationSpeed = 1 + (int)(explorePreference * 10);
+        this.agriculturalKnowledge = 1 + (int)(agriculturalPreference * 10);
+        this.militryPower = 1 + (int)(militaryPreference * 10);
     }
 
     private void setPreferences() {
@@ -130,7 +130,7 @@ public class Tribe {
     public void turnCollection() {
         //Eat the food
         int nodesRemaining = tribeNodes.size();
-        long allotedFood = population / nodesRemaining;
+        long allotedFood = (population / nodesRemaining); //Todo use agri power to reduce this number
         double deficitFood = 0;
         for (Node n: tribeNodes) {
             deficitFood += n.takeFood(allotedFood);
@@ -150,37 +150,68 @@ public class Tribe {
         research();
     }
 
+    private void spendResource(double amount, Resources.ResourceType rt) {
+        //Check if we are trying to take more than we should
+        if (canSpend(amount,rt)) {
+            for (Node n: tribeNodes) {
+                switch (rt) {
+                    case FOOD:
+                        n.takeFood(amount);
+                        break;
+                    case MINERAL:
+                        n.takeMineral(amount);
+                        break;
+                    case UTILITY:
+                        n.takeUtility(amount);
+                }
+            }
+        }
+    }
+
     private void research() {
         for(int rc=0; rc < 5; rc++) {
             double rVal = Helpers.randBetween(0.0,1.0);
             //Placed in order - explore/agri/mil
             double spendMin;
             double spendUtil;
+            //Todo lower based on the amount of preference towards resource making it cheaper
             if (rVal < explorePreference) {
                 //Spend on explore points
-                spendMin = 0;
-                spendUtil = 0;
+                spendMin = (explorationSpeed * 100) * (1 - explorePreference);
+                spendUtil = (explorationSpeed * 100) * (1 - explorePreference) ;
                 if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
                         (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
-                    //Spend and Add
+                    //Spend
+                    spendResource(spendMin, Resources.ResourceType.MINERAL);
+                    spendResource(spendUtil, Resources.ResourceType.UTILITY);
+                    // Add
+                    explorationSpeed++;
                 }
             } else if ((rVal > explorePreference) && (rVal < explorePreference + agriculturalPreference)) {
                 //Spend on agri
                 //Spend on explore points
-                spendMin = 0;
-                spendUtil = 0;
+                spendMin = (agriculturalKnowledge * 80) * (1 - agriculturalPreference);
+                spendUtil = (agriculturalKnowledge * 120) * (1 - agriculturalPreference);
                 if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
                         (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
-                    //Spend and Add
+                    //Spend
+                    spendResource(spendMin, Resources.ResourceType.MINERAL);
+                    spendResource(spendUtil, Resources.ResourceType.UTILITY);
+                    // Add
+                    agriculturalKnowledge++;
                 }
             } else {
                 //Spend on milit
                 //Spend on explore points
-                spendMin = 0;
-                spendUtil = 0;
+                spendMin = (militryPower * 120) * (1 - militaryPreference);
+                spendUtil = (militryPower * 80) * (1 - militaryPreference);
                 if((canSpend(spendMin, Resources.ResourceType.MINERAL)) &&
                         (canSpend(spendUtil, Resources.ResourceType.UTILITY))) {
-                    //Spend and Add
+                    //Spend
+                    spendResource(spendMin, Resources.ResourceType.MINERAL);
+                    spendResource(spendUtil, Resources.ResourceType.UTILITY);
+                    // Add
+                    militryPower++;
                 }
             }
         }
@@ -188,11 +219,6 @@ public class Tribe {
 
     private boolean canSpend(double amount, Resources.ResourceType rt) {
         return (amount < getResource(rt));
-    }
-
-
-    private double researchCost(double traitDiscount, double currentAmount) {
-        return 0;
     }
 
     public double forGloryAndHonour() {
