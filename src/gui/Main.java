@@ -1,16 +1,19 @@
 package gui;
 
+import classes.Location;
 import classes.Map;
-import classes.Node;
 import classes.QuadtreeMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -37,6 +40,28 @@ public class Main extends Application {
 
         primaryStage.setTitle("Life.2");
         primaryStage.setScene(scene);
+
+        GraphicsContext tribeG = controller.tribeCanvas.getGraphicsContext2D();
+
+        controller.tribeCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                // Display a window with more details
+
+            }
+        });
+
+        controller.tribeCanvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                // Highlight the square
+                GraphicsContext g = controller.resourceCanvas.getGraphicsContext2D();
+                g.setFill(Color.WHITE);
+                Location l = controller.getLocationForScreen(event.getX(), event.getY());
+                g.fillRect(l.getX(), l.getY(), controller.viewSize, controller.viewSize);
+                controller.selected = l;
+            }
+        });
 
         controller.scroll.viewportBoundsProperty().addListener((ChangeListener<Bounds>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));
         controller.scroll.hvalueProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> controller.showBounds( controller.scroll));

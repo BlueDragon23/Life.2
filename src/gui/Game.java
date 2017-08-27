@@ -4,46 +4,55 @@ import classes.Location;
 import classes.Map;
 import classes.Node;
 import classes.Tribe;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class Game {
     @FXML
-    private Canvas resourceCanvas;
-    private Canvas tribeCanvas;
+    public Canvas resourceCanvas;
+
+    @FXML
+    public Canvas tribeCanvas;
 
     @FXML
     public ScrollPane scroll;
 
     private Location bottomLeft = new Location(-50, -50);
     private Location topRight = new Location(50, 50);
-    private int viewSize = 10;
+    int viewSize = 10;
+    Location selected;
+
+    public int getXOffset() {
+        return -(bottomLeft.getX() * viewSize);
+    }
+
+    public int getYOffset() {
+        return -(bottomLeft.getY() * viewSize);
+    }
 
     public void drawMap(Map m) {
         resourceCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
         resourceCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
-        tribeCanvas.setHeight(resourceCanvas.getHeight());
-        tribeCanvas.setWidth(resourceCanvas.getWidth());
+        tribeCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
+        tribeCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
         GraphicsContext resourceLayer = resourceCanvas.getGraphicsContext2D();
         resourceLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
         // Make sure the bottomLeft is the bottomLeft of the screen
-        // Add resource objects
-        int xOffset = -(bottomLeft.getX() * viewSize);
-        int yOffset = -(bottomLeft.getY() * viewSize);
+        int xOffset = getXOffset();
+        int yOffset = getYOffset();
         for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
             for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
-                Node n = m.getNode(new Location(x, y));
+                Location l = new Location(x, y);
+                if (l.equals(selected)) {
+                    continue;
+                }
+                Node n = m.getNode(l);
                 if (n == null) {
                     resourceLayer.setFill(Color.GREY);
                 } else {
@@ -67,8 +76,8 @@ public class Game {
             }
         }
         //Tribe Layer
-        GraphicsContext tribeLayer = resourceCanvas.getGraphicsContext2D();
-        tribeLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
+        GraphicsContext tribeLayer = tribeCanvas.getGraphicsContext2D();
+        tribeLayer.clearRect(0, 0, tribeCanvas.getWidth(), tribeCanvas.getHeight());
         for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
             for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
                 Node n = m.getNode(new Location(x, y));
@@ -123,6 +132,12 @@ public class Game {
         double x = (scrollPane.getContent().getBoundsInParent().getWidth() - width) * hValue;
         double y = (scrollPane.getContent().getBoundsInParent().getHeight() - height) * vValue;
 
+    }
+
+    Location getLocationForScreen(double x, double y) {
+        double xRound = x - x % viewSize;
+        double yRound = y - y % viewSize;
+        return new Location((int) (xRound - getXOffset()) / viewSize, (int) (yRound - getYOffset()) / viewSize);
     }
 
 }
