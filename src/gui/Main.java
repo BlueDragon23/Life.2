@@ -104,6 +104,7 @@ public class Main extends Application {
             public void handle(long now) {
                 controller.drawMap(m);
             }
+
         }.start();
 
         //Start game loop

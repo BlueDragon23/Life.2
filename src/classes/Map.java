@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
@@ -22,12 +23,16 @@ public abstract class Map {
     protected int maxX;
     protected int minX;
 
+    //Keep a list of colours
+    private List<List<Integer>> cList;
+
     public abstract Node getNode(Location l);
     public abstract Node getNodeSafe(Location l);
     public abstract void addNode(Node n);
 
     public Map() {
         tribes = new ArrayList<>();
+        cList = new ArrayList<>();
     }
 
     public List<Node> getAdjacentNodes(Location l) {
@@ -131,8 +136,27 @@ public abstract class Map {
         Node n = getNode(new Location(x, y));
         if((n.getLandType() != Node.LandType.WATER) && (n.getLandType() != Node.LandType.MOUNTAIN)){
             //get random colour
-            javafx.scene.paint.Color c = javafx.scene.paint.Color.rgb(Helpers.randBetween(0,255),
-                    Helpers.randBetween(0,255),Helpers.randBetween(0,255));
+            int rVal;
+            int gVal;
+            int bVal;
+            List<Integer> rgbAdd = new ArrayList<>();
+            rVal = Helpers.randBetween(0,255);
+            gVal = Helpers.randBetween(0,255);
+            bVal = Helpers.randBetween(0,255);
+            rgbAdd.add(rVal);
+            rgbAdd.add(gVal);
+            rgbAdd.add(bVal);
+            while (cList.contains(rgbAdd)) {
+                rgbAdd = new ArrayList<>();
+                rVal = Helpers.randBetween(0,255);
+                gVal = Helpers.randBetween(0,255);
+                bVal = Helpers.randBetween(0,255);
+                rgbAdd.add(rVal);
+                rgbAdd.add(gVal);
+                rgbAdd.add(bVal);
+            }
+            cList.add(rgbAdd);
+            javafx.scene.paint.Color c = javafx.scene.paint.Color.rgb(rVal,gVal,bVal);
             Tribe tribe = new Tribe(n,Helpers.randBetween(90,110),c);
             n.setTribe(tribe);
             tribes.add(tribe);
