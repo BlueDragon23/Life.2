@@ -10,10 +10,12 @@ public class GameLoop implements Runnable {
     private int radius;
     private Map map;
     public boolean running = true;
+    private int generation;
 
     public GameLoop(int radius, Map m) {
         this.radius = radius;
         this.map = m;
+        generation = 0;
     }
 
     private void tick() {
@@ -55,13 +57,47 @@ public class GameLoop implements Runnable {
                 expansionNodes.put(node, expandingTribe);
             }
         }
-        for (Node node : expansionNodes.keySet()) {
-            List<Tribe> tribes = expansionNodes.get(node);
+        for (Node n : expansionNodes.keySet()) {
+            List<Tribe> tribes = expansionNodes.get(n);
             if (tribes.size() == 1) {
-                node.setTribe(tribes.get(0));
-                tribes.get(0).addNode(node);
+                n.setTribe(tribes.get(0));
+                tribes.get(0).addNode(n);
             } else {
                 // FIGHT
+                Tribe tribe1;
+                Tribe tribe2;
+
+                //Do all the fighting and looting
+                while(tribes.size() > 1) {
+                    tribe1 = tribes.get(0);
+                    tribe2 = tribes.get(1);
+                    if (tribe1.forGloryAndHonour() >= tribe2.forGloryAndHonour()) {
+                        //Tribe 1 wins
+                        double foodLoot = ((tribe2.getFood() / tribe2.nodeCount()) / 10);
+                        double mineralLoot = ((tribe2.getFood() / tribe2.nodeCount()) / 10);
+                        double utilityLoot = ((tribe2.getFood() / tribe2.nodeCount()) / 10);
+
+                        tribe1.addBattleResult(foodLoot,mineralLoot,utilityLoot);
+                        tribe1.addBattleLog(new BattleLog(generation,tribe2.getColour(),true));
+                        tribe2.addBattleLog(new BattleLog(generation,tribe1.getColour(),false));
+                        tribe2.addBattleResult((-1 * foodLoot),(-1 * mineralLoot),(-1 * utilityLoot));
+                        tribes.remove(tribe2);
+                    } else {
+                        //Tribe 2 wins
+                        double foodLoot = ((tribe1.getFood() / tribe1.nodeCount()) / 10);
+                        double mineralLoot = ((tribe1.getFood() / tribe1.nodeCount()) / 10);
+                        double utilityLoot = ((tribe1.getFood() / tribe1.nodeCount()) / 10);
+
+                        tribe2.addBattleResult(foodLoot,mineralLoot,utilityLoot);
+                        tribe2.addBattleLog(new BattleLog(generation,tribe1.getColour(),true));
+                        tribe1.addBattleLog(new BattleLog(generation,tribe2.getColour(),false));
+                        tribe1.addBattleResult((-1 * foodLoot),(-1 * mineralLoot),(-1 * utilityLoot));
+                        tribes.remove(tribe1);
+                    }
+                }
+                //Remaining tribe wins
+                tribes.get(0).addNode(n);
+                n.setTribe(tribes.get(0));
             }
         }
     }
@@ -87,6 +123,7 @@ public class GameLoop implements Runnable {
             try {
                 if(running) {
                    tick();
+                    generation++;
                 }
                 Thread.sleep(100);
             } catch(InterruptedException e) {
