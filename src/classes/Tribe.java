@@ -245,7 +245,7 @@ public class Tribe {
 
         //There is the possibility of no searching
         if (possibleExploration.size() > 0) {
-            int searchSize = (int)(population % (explorationSpeed * Helpers.randBetween(0,(explorationSpeed * 10)))) + 1;
+            int searchSize = (int)(population % (explorationSpeed * Helpers.randBetween(0,(explorationSpeed * 10)) + 1)) ;
             if (searchSize > possibleExploration.size()) {
                 for (Node n: possibleExploration) {
                     exploredNodes.add(n);
@@ -263,7 +263,7 @@ public class Tribe {
 
     public List<Node> turnExpand() {
         List<Node> expand = new ArrayList<>();
-        int expandSize = (int)(population%(militaryPreference * Helpers.randBetween(0,(militaryPreference * 10))));
+        int expandSize = (int)(population%(militaryPreference * Helpers.randBetween(0,(militaryPreference * 10)) + 1));
         if (exploredNodes.size() > 0) {
             if (expandSize > exploredNodes.size()) {
                 for (Node n: exploredNodes) {
