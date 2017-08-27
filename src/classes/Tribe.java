@@ -1,6 +1,7 @@
 package classes;
 
 import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,12 @@ public class Tribe {
     private double foodLoot;
     private double materialLoot;
     private double utilityLoot;
-    private BlendMode bm;
+    private Color colour;
 
-    public Tribe(Node n, long initialPopulation, BlendMode bm) {
+    public Tribe(Node n, long initialPopulation, Color c) {
         tribeNodes = new ArrayList<>();
         exploredNodes = new ArrayList<>();
-        this.bm = bm;
+        this.colour = c;
         tribeNodes.add(n);
         this.population = initialPopulation;
 
@@ -255,8 +256,8 @@ public class Tribe {
         return expand;
     }
 
-    public BlendMode getBlendMode(){
-        return bm;
+    public Color getColour(){
+        return colour;
     }
 
 

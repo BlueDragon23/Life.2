@@ -20,7 +20,8 @@ import javafx.scene.paint.Paint;
 
 public class Game {
     @FXML
-    private Canvas canvas;
+    private Canvas resourceCanvas;
+    private Canvas tribeCanvas;
 
     @FXML
     public ScrollPane scroll;
@@ -30,47 +31,55 @@ public class Game {
     private int viewSize = 10;
 
     public void drawMap(Map m) {
-        canvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
-        canvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
-        GraphicsContext g = canvas.getGraphicsContext2D();
-        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        resourceCanvas.setWidth((m.getMaxX() - m.getMinX()) * viewSize);
+        resourceCanvas.setHeight((m.getMaxY() - m.getMinY()) * viewSize);
+        tribeCanvas.setHeight(resourceCanvas.getHeight());
+        tribeCanvas.setWidth(resourceCanvas.getWidth());
+        GraphicsContext resourceLayer = resourceCanvas.getGraphicsContext2D();
+        resourceLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
         // Make sure the bottomLeft is the bottomLeft of the screen
+        // Add resource objects
         int xOffset = -(bottomLeft.getX() * viewSize);
         int yOffset = -(bottomLeft.getY() * viewSize);
         for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
             for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
                 Node n = m.getNode(new Location(x, y));
                 if (n == null) {
-                    g.setFill(Color.GREY);
-
+                    resourceLayer.setFill(Color.GREY);
                 } else {
                     switch (n.getLandType()) {
                         case PLAINS:
-                            g.setFill(Color.GREEN);
+                            resourceLayer.setFill(Color.GREEN);
                             break;
                         case WATER:
-                            g.setFill(Color.BLUE);
+                            resourceLayer.setFill(Color.BLUE);
                             break;
                         case COASTAL:
-                            g.setFill(Color.YELLOW);
+                            resourceLayer.setFill(Color.YELLOW);
                             break;
                         default:
-                            g.setFill(Color.RED);
+                            resourceLayer.setFill(Color.RED);
                             break;
                     }
 
                 }
-
-                Tribe t = (m.getNode(new Location(x,y)).getTribe());
-                BlendMode bm;
-                if(t == null) {
-                    bm = g.getGlobalBlendMode();
-                } else {
-                    bm = t.getBlendMode();
+                resourceLayer.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
+            }
+        }
+        //Tribe Layer
+        GraphicsContext tribeLayer = resourceCanvas.getGraphicsContext2D();
+        tribeLayer.clearRect(0, 0, resourceCanvas.getWidth(), resourceCanvas.getHeight());
+        for (int x = bottomLeft.getX(); x < topRight.getX(); x++) {
+            for (int y = bottomLeft.getY(); y < topRight.getY(); y++) {
+                Node n = m.getNode(new Location(x, y));
+                if (n != null) {
+                    if (n.hasTribe()) {
+                        //Add a rectangle for the tribe using tribe rec colour
+                        Tribe t = (m.getNode(new Location(x,y)).getTribe());
+                        tribeLayer.setFill(t.getColour());
+                        tribeLayer.fillOval(x * viewSize + xOffset,y * viewSize + yOffset, viewSize, viewSize);
+                    }
                 }
-                g.setGlobalBlendMode(bm);
-                g.fillRect(x * viewSize + xOffset, y * viewSize + yOffset, viewSize, viewSize);
-                g.setGlobalBlendMode(bm);
             }
         }
     }
@@ -79,7 +88,7 @@ public class Game {
 
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            canvas.setWidth((double) newValue - 30);
+            resourceCanvas.setWidth((double) newValue - 30);
         }
     }
 
@@ -87,7 +96,7 @@ public class Game {
 
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-            canvas.setHeight((double) newValue);
+            resourceCanvas.setHeight((double) newValue);
         }
     }
 
