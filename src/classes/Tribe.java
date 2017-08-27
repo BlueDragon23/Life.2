@@ -1,9 +1,7 @@
 package classes;
 
-import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 
-import javax.tools.JavaCompiler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +18,19 @@ public class Tribe {
 
     //Stats which allocated at start but can be improved
     private double birthRate;
-    private int explorationSpeed;
-    private int militryPower;
-    private int agriculturalKnowledge;
+    public int explorationSpeed;
+    public int militryPower;
+    public int agriculturalKnowledge;
     private int battles;
 
     //Retained Resources (loot)
     private double foodLoot;
-    private double materialLoot;
+    private double mineralLoot;
     private double utilityLoot;
     private Color colour;
+
+    //
+    private List<BattleLog> battleLog;
 
     public Tribe(Node n, long initialPopulation, Color c) {
         tribeNodes = new ArrayList<>();
@@ -46,13 +47,15 @@ public class Tribe {
         this.explorationSpeed = 1 + (int)(explorePreference * 10);
         this.agriculturalKnowledge = 1 + (int)(agriculturalPreference * 10);
         this.militryPower = 1 + (int)(militaryPreference * 10);
+
+        this.battleLog = new ArrayList<>();
     }
 
     private void setPreferences() {
-        double total = 0.97;
-        explorePreference = 0.01;
-        agriculturalPreference = 0.01;
-        militaryPreference = 0.01;
+        double total = 0.7;
+        explorePreference = 0.10;
+        agriculturalPreference = 0.10;
+        militaryPreference = 0.10;
         List<Integer> preferences = new ArrayList<>();
         preferences.add(0);
         preferences.add(1);
@@ -77,6 +80,40 @@ public class Tribe {
             preferences.remove(preferences.indexOf(trait));
         }
     }
+
+    public String getType() {
+        if ((explorePreference > militaryPreference) && (explorePreference > agriculturalPreference)) {
+            //Get second pref
+            if (agriculturalPreference > militaryPreference) {
+                //Explore/Ag
+                return "Exploring Agriculture";
+            } else {
+                //Explore/Mil
+                return "Exploring Aggressive ";
+            }
+        } else if ((agriculturalPreference > explorePreference) && (agriculturalPreference > militaryPreference)) {
+            //Get second pref
+            if (explorePreference > militaryPreference) {
+                //Ag/Exp
+                return "Agricultural Exploration";
+            } else {
+                //Ag/Mil
+                return "Agriculture Enforced ";
+            }
+        } else {
+            //Mil pref is highest
+            //Get second pref
+            if (agriculturalPreference > explorePreference) {
+                //Mil/Ag
+                return "Aggressive Agriculture";
+            } else {
+                //Mil/Exp
+                return "Aggressive Exploration";
+            }
+        }
+    }
+
+
 
     public void addNode(Node n) {
         exploredNodes.remove(n); //Remove the item if it is in the
@@ -117,14 +154,21 @@ public class Tribe {
     public int nodeCount() {
         return tribeNodes.size();
     }
-    public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
+    public void addBattleResult(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
                              double agriRLoot) {
         this.battles++;
         this.foodLoot += foodLoot;
-        this.materialLoot += materialLoot;
+        this.mineralLoot += materialLoot;
         this.utilityLoot += utilityLoot;
         this.explorationSpeed += exploreRLoot;
         this.agriculturalKnowledge += agriRLoot;
+    }
+
+    public void addBattleLog(BattleLog bl) {
+        this.battleLog.add(bl);
+    }
+    public List<BattleLog> getBattleLog(){
+        return battleLog;
     }
 
     public void turnCollection() {
@@ -156,13 +200,31 @@ public class Tribe {
             for (Node n: tribeNodes) {
                 switch (rt) {
                     case FOOD:
-                        n.takeFood(amount);
+                        if(foodLoot > amount) {
+                            foodLoot -= amount;
+                        } else {
+                            amount -= foodLoot;
+                            foodLoot = 0;
+                            n.takeFood(amount);
+                        }
                         break;
                     case MINERAL:
-                        n.takeMineral(amount);
+                        if(mineralLoot > amount) {
+                            mineralLoot -= amount;
+                        } else {
+                            amount -= mineralLoot;
+                            mineralLoot = 0;
+                            n.takeMineral(amount);
+                        }
                         break;
                     case UTILITY:
-                        n.takeUtility(amount);
+                        if(utilityLoot > amount) {
+                            utilityLoot -= amount;
+                        } else {
+                            amount -= utilityLoot;
+                            utilityLoot = 0;
+                            n.takeUtility(amount);
+                        }
                 }
             }
         }
@@ -218,7 +280,19 @@ public class Tribe {
     }
 
     private boolean canSpend(double amount, Resources.ResourceType rt) {
-        return (amount < getResource(rt));
+        return (amount < (getResource(rt) + getLoot(rt)));
+    }
+    private double getLoot(Resources.ResourceType rt) {
+        switch (rt){
+            case FOOD:
+                return foodLoot;
+            case MINERAL:
+                return mineralLoot;
+            case UTILITY:
+                return utilityLoot;
+            default:
+                return 0;
+        }
     }
 
     public double forGloryAndHonour() {
@@ -266,17 +340,24 @@ public class Tribe {
 
     public List<Node> turnExpand() {
         List<Node> expand = new ArrayList<>();
+        double expandCost = (((nodeCount() * 10) * (1 - agriculturalPreference)) % agriculturalKnowledge);
         int expandSize = (int)(population%(militaryPreference * Helpers.randBetween(0,(militaryPreference * 10)) + 1));
         if (exploredNodes.size() > 0) {
             if (expandSize > exploredNodes.size()) {
                 for (Node n: exploredNodes) {
-                    expand.add(n);
+                    if(canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                        expand.add(n);
+                        spendResource(expandCost, Resources.ResourceType.FOOD);
+                    }
                 }
             } else if (expandSize > 0) {
                 int randNodePosition;
                 for (int i = 0; i < expandSize; i ++) {
                     randNodePosition = Helpers.randBetween(0,exploredNodes.size() - 1);
-                    expand.add(exploredNodes.get(randNodePosition));
+                    if(canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                        expand.add(exploredNodes.get(randNodePosition));
+                        spendResource(expandCost, Resources.ResourceType.FOOD);
+                    }
                 }
             }
         }
@@ -287,6 +368,31 @@ public class Tribe {
         return colour;
     }
 
+
+
+
+    public class BattleLog{
+        private int time;
+        private Color enemyColour;
+        private boolean outcome;
+        public BattleLog(int t,Color c, boolean result) {
+            this.time = t;
+            this.enemyColour = c;
+            this.outcome = result;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public Color getEnemyColour() {
+            return enemyColour;
+        }
+
+        public boolean getOutcome() {
+            return outcome;
+        }
+    }
 
 
 
