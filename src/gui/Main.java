@@ -75,11 +75,12 @@ public class Main extends Application {
                     gp.setHgap(10);
                     gp.setVgap(10);
                     gp.addColumn(0, new Text("Colour"), new Text("Type"), new Text("Exploration"), new Text("Agriculture"),
-                            new Text("Military"), new Text("Battles Won"));
+                            new Text("Military"), new Text("Battles Won"), new Text("Food"), new Text("Minerals"), new Text("Utility"));
                     Tribe t = n.getTribe();
                     gp.addColumn(1, new Text(t.getColour().toString()), new Text(t.getType()), new Text(Integer.toString(t.explorationSpeed)),
                             new Text(Integer.toString(t.agriculturalKnowledge)), new Text(Integer.toString(t.militryPower)),
-                            new Text(Integer.toString(t.getBattleLog().size())));
+                            new Text(Integer.toString(t.battles)),new Text(Integer.toString((int)t.getFood())),
+                            new Text(Integer.toString((int)t.getMinerals())),new Text(Integer.toString((int)t.getUtility())));
                     Button b = new Button("Close");
                     b.setDefaultButton(true);
                     b.setOnAction(new EventHandler<ActionEvent>() {
