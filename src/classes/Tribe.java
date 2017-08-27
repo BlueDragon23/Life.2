@@ -21,7 +21,7 @@ public class Tribe {
     public int explorationSpeed;
     public int militryPower;
     public int agriculturalKnowledge;
-    private int battles;
+    public int battles;
 
     //Retained Resources (loot)
     private double foodLoot;
