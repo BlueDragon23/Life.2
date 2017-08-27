@@ -1,9 +1,7 @@
 package classes;
 
-import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 
-import javax.tools.JavaCompiler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class Tribe {
 
     //Retained Resources (loot)
     private double foodLoot;
-    private double materialLoot;
+    private double mineralLoot;
     private double utilityLoot;
     private Color colour;
 
@@ -156,15 +154,16 @@ public class Tribe {
     public int nodeCount() {
         return tribeNodes.size();
     }
-    public void addBattleWin(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
+    public void addBattleResult(double foodLoot, double materialLoot, double utilityLoot, double exploreRLoot,
                              double agriRLoot) {
         this.battles++;
         this.foodLoot += foodLoot;
-        this.materialLoot += materialLoot;
+        this.mineralLoot += materialLoot;
         this.utilityLoot += utilityLoot;
         this.explorationSpeed += exploreRLoot;
         this.agriculturalKnowledge += agriRLoot;
     }
+
     public void addBattleLog(BattleLog bl) {
         this.battleLog.add(bl);
     }
@@ -201,13 +200,31 @@ public class Tribe {
             for (Node n: tribeNodes) {
                 switch (rt) {
                     case FOOD:
-                        n.takeFood(amount);
+                        if(foodLoot > amount) {
+                            foodLoot -= amount;
+                        } else {
+                            amount -= foodLoot;
+                            foodLoot = 0;
+                            n.takeFood(amount);
+                        }
                         break;
                     case MINERAL:
-                        n.takeMineral(amount);
+                        if(mineralLoot > amount) {
+                            mineralLoot -= amount;
+                        } else {
+                            amount -= mineralLoot;
+                            mineralLoot = 0;
+                            n.takeMineral(amount);
+                        }
                         break;
                     case UTILITY:
-                        n.takeUtility(amount);
+                        if(utilityLoot > amount) {
+                            utilityLoot -= amount;
+                        } else {
+                            amount -= utilityLoot;
+                            utilityLoot = 0;
+                            n.takeUtility(amount);
+                        }
                 }
             }
         }
@@ -263,7 +280,19 @@ public class Tribe {
     }
 
     private boolean canSpend(double amount, Resources.ResourceType rt) {
-        return (amount < getResource(rt));
+        return (amount < (getResource(rt) + getLoot(rt)));
+    }
+    private double getLoot(Resources.ResourceType rt) {
+        switch (rt){
+            case FOOD:
+                return foodLoot;
+            case MINERAL:
+                return mineralLoot;
+            case UTILITY:
+                return utilityLoot;
+            default:
+                return 0;
+        }
     }
 
     public double forGloryAndHonour() {
