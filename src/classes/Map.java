@@ -14,6 +14,7 @@ public abstract class Map {
 
     int halfMapSize = (int) Math.pow(2, 9);
     private int initialRadius = 50;
+    private List<Tribe> tribes;
 
     // The current minimum/maximum tiles generated
     protected int maxY;
@@ -24,6 +25,10 @@ public abstract class Map {
     public abstract Node getNode(Location l);
     public abstract Node getNodeSafe(Location l);
     public abstract void addNode(Node n);
+
+    public Map() {
+        tribes = new ArrayList<>();
+    }
 
     public List<Node> getAdjacentNodes(Location l) {
         List<Node> nodes = new ArrayList<>();
@@ -128,7 +133,9 @@ public abstract class Map {
             //get random colour
             javafx.scene.paint.Color c = javafx.scene.paint.Color.rgb(Helpers.randBetween(0,255),
                     Helpers.randBetween(0,255),Helpers.randBetween(0,255));
-            n.setTribe(new Tribe(n,Helpers.randBetween(90,110),c));
+            Tribe tribe = new Tribe(n,Helpers.randBetween(90,110),c);
+            n.setTribe(tribe);
+            tribes.add(tribe);
             return true;
         } else {
             return false;
@@ -138,6 +145,10 @@ public abstract class Map {
 
     public int getInitialRadius() {
         return initialRadius;
+    }
+
+    public List<Tribe> getTribes() {
+        return new ArrayList<>(tribes);
     }
 
     protected Node genNode(Location l) {
