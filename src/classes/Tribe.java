@@ -31,6 +31,9 @@ public class Tribe {
     private double utilityLoot;
     private Color colour;
 
+    //
+    private List<BattleLog> battleLog;
+
     public Tribe(Node n, long initialPopulation, Color c) {
         tribeNodes = new ArrayList<>();
         exploredNodes = new ArrayList<>();
@@ -46,13 +49,15 @@ public class Tribe {
         this.explorationSpeed = 1 + (int)(explorePreference * 10);
         this.agriculturalKnowledge = 1 + (int)(agriculturalPreference * 10);
         this.militryPower = 1 + (int)(militaryPreference * 10);
+
+        this.battleLog = new ArrayList<>();
     }
 
     private void setPreferences() {
-        double total = 0.97;
-        explorePreference = 0.01;
-        agriculturalPreference = 0.01;
-        militaryPreference = 0.01;
+        double total = 0.7;
+        explorePreference = 0.10;
+        agriculturalPreference = 0.10;
+        militaryPreference = 0.10;
         List<Integer> preferences = new ArrayList<>();
         preferences.add(0);
         preferences.add(1);
@@ -159,6 +164,12 @@ public class Tribe {
         this.utilityLoot += utilityLoot;
         this.explorationSpeed += exploreRLoot;
         this.agriculturalKnowledge += agriRLoot;
+    }
+    public void addBattleLog(BattleLog bl) {
+        this.battleLog.add(bl);
+    }
+    public List<BattleLog> getBattleLog(){
+        return battleLog;
     }
 
     public void turnCollection() {
@@ -328,6 +339,31 @@ public class Tribe {
         return colour;
     }
 
+
+
+
+    public class BattleLog{
+        private int time;
+        private Color enemyColour;
+        private boolean outcome;
+        public BattleLog(int t,Color c, boolean result) {
+            this.time = t;
+            this.enemyColour = c;
+            this.outcome = result;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public Color getEnemyColour() {
+            return enemyColour;
+        }
+
+        public boolean getOutcome() {
+            return outcome;
+        }
+    }
 
 
 
