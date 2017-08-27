@@ -88,7 +88,7 @@ public class GameLoop implements Runnable {
                 if(running) {
                    tick();
                 }
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch(InterruptedException e) {
                 System.out.println("broke!");
             }

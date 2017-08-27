@@ -300,17 +300,24 @@ public class Tribe {
 
     public List<Node> turnExpand() {
         List<Node> expand = new ArrayList<>();
+        double expandCost = (((nodeCount() * 10) * (1 - agriculturalPreference)) % agriculturalKnowledge);
         int expandSize = (int)(population%(militaryPreference * Helpers.randBetween(0,(militaryPreference * 10)) + 1));
         if (exploredNodes.size() > 0) {
             if (expandSize > exploredNodes.size()) {
                 for (Node n: exploredNodes) {
-                    expand.add(n);
+                    if(canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                        expand.add(n);
+                        spendResource(expandCost, Resources.ResourceType.FOOD);
+                    }
                 }
             } else if (expandSize > 0) {
                 int randNodePosition;
                 for (int i = 0; i < expandSize; i ++) {
                     randNodePosition = Helpers.randBetween(0,exploredNodes.size() - 1);
-                    expand.add(exploredNodes.get(randNodePosition));
+                    if(canSpend(expandCost, Resources.ResourceType.FOOD)) {
+                        expand.add(exploredNodes.get(randNodePosition));
+                        spendResource(expandCost, Resources.ResourceType.FOOD);
+                    }
                 }
             }
         }
