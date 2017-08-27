@@ -30,6 +30,10 @@ public class Location {
         return (other.x == x) && (other.y == y);
     }
 
+    public int hashCode() {
+        return x * 15485863 + y;
+    }
+
     public String toString() {
         return "x: " + x + ", y: " + y;
     }

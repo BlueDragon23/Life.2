@@ -217,6 +217,9 @@ public class Tribe {
         //for each of the adj nodes if it is a water
         //node than ignore it.
 
+        for (Node n : tribeNodes) {
+            possibleExploration.remove(n);
+        }
         //There is the possibility of no searching
         if (possibleExploration.size() > 0) {
             int searchSize = (int)(population % (explorationSpeed * Helpers.randBetween(0,(explorationSpeed * 10)))) + 1;
